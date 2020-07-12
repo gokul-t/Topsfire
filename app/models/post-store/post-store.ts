@@ -1,6 +1,7 @@
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 import { withEnvironment } from "../extensions/with-environment"
 import { PostModel, Post } from "../post/post"
+import { Alert } from "react-native";
 
 /**
  * Model description here for TypeScript hints.

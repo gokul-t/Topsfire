@@ -5,6 +5,7 @@ import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
 import * as Models from "../../models"
 import * as Utils from "../../utils"
+import _ from "lodash";
 /**
  * Manages all requests to the API.
  */
@@ -80,30 +81,31 @@ export class Api {
         total: response._paging.total,
         totalPages: response._paging.totalPages
       }
-    } catch {
+    } catch (err) {
+      __DEV__ && console.tron.log("getCategories", err);
       return { kind: "bad-data" }
     }
   }
   async getPosts({ categoryId, page }): Promise<Types.GetPostsResult> {
-    
-    const convertFeaturedMedia = (m) => {
+
+    const convertFeaturedMedia = (m, i) => {
       return ({
-        medium: m.media_details.sizes.medium.source_url,
-        large: m.media_details.sizes.large.source_url,
-        thumbnail: m.media_details.sizes.thumbnail.source_url,
-        source_url: m.source_url
+        medium: _.get(m,"media_details.sizes.medium.source_url"),
+        large: _.get(m,"media_details.sizes.large.source_url"),
+        thumbnail: _.get(m,"media_details.sizes.thumbnail.source_url"),
+        source_url: _.get(m,"source_url")
       })
     }
 
     const convertPost = raw => {
-      const featured_media = raw._embedded["wp:featuredmedia"] || [];
+      const featured_media = raw.featured_media ? raw._embedded["wp:featuredmedia"] : [];
       return {
         id: String(raw.id),
         date: raw.date,
         title: raw.title,
         content: raw.content,
         status: raw.status,
-        featured_media: featured_media.map(convertFeaturedMedia),
+        featured_media: Array.isArray(featured_media) ? featured_media.map(convertFeaturedMedia) : [],
         categories: raw.categories
       }
     }
@@ -114,12 +116,13 @@ export class Api {
       const rawPosts = response;
       const resultPosts: Models.PostSnapshot[] = rawPosts.map(convertPost)
       return {
-        kind: "ok", 
-        posts: resultPosts, 
+        kind: "ok",
+        posts: resultPosts,
         total: response._paging.total,
         totalPages: response._paging.totalPages
       }
-    } catch {
+    } catch (err) {
+      __DEV__ && console.tron.log("getPosts", err);
       return { kind: "bad-data" }
     }
   }
