@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-
+import { CategoryModel, Category } from "../category/category"
 /**
  * Model description here for TypeScript hints.
  */
@@ -20,10 +20,10 @@ export const PostModel = types
     id: types.identifier,
     date: types.string,
     title: RenderModel,
-    content : RenderModel,
+    content: RenderModel,
     status: types.string,
     featured_media: types.optional(types.array(FeaturedMediaModel), []),
-    categories: types.array(types.integer),
+    categories: types.array(types.reference(types.late(() => CategoryModel))),
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
