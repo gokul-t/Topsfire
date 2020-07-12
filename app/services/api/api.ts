@@ -8,7 +8,6 @@ import * as Utils from "../../utils"
 /**
  * Manages all requests to the API.
  */
-let postsResponse: WPRequest = null;
 
 export class Api {
   /**
@@ -85,10 +84,8 @@ export class Api {
       return { kind: "bad-data" }
     }
   }
-
-  convertPost = raw => {
-    const featured_media = raw._embedded["wp:featuredmedia"] || [];
-
+  async getPosts({ categoryId, page }): Promise<Types.GetPostsResult> {
+    
     const convertFeaturedMedia = (m) => {
       return ({
         medium: m.media_details.sizes.medium.source_url,
@@ -98,41 +95,33 @@ export class Api {
       })
     }
 
-    return {
-      id: String(raw.id),
-      date: raw.date,
-      title: raw.title,
-      content: raw.content,
-      status: raw.status,
-      featured_media: featured_media.map(convertFeaturedMedia),
-      categories: raw.categories
+    const convertPost = raw => {
+      const featured_media = raw._embedded["wp:featuredmedia"] || [];
+      return {
+        id: String(raw.id),
+        date: raw.date,
+        title: raw.title,
+        content: raw.content,
+        status: raw.status,
+        featured_media: featured_media.map(convertFeaturedMedia),
+        categories: raw.categories
+      }
     }
-  }
-  async getPosts({ categoryId }): Promise<Types.GetPostsResult> {
+
     try {
       const request = categoryId ? this.wp.posts().category(categoryId) : this.wp.posts();
-      postsResponse = await request.embed()
-      const rawPosts = postsResponse;
-      const resultPosts: Models.PostSnapshot[] = rawPosts.map(this.convertPost)
-      return { kind: "ok", posts: resultPosts }
+      const response: WPRequest = await request.page(page).embed()
+      const rawPosts = response;
+      const resultPosts: Models.PostSnapshot[] = rawPosts.map(convertPost)
+      return {
+        kind: "ok", 
+        posts: resultPosts, 
+        total: response._paging.total,
+        totalPages: response._paging.totalPages
+      }
     } catch {
       return { kind: "bad-data" }
     }
-  }
-
-  async loadMorePosts(): Promise<Types.GetPostsResult> {
-    if (postsResponse && postsResponse._paging && postsResponse._paging.next) {
-      try {
-        postsResponse = await postsResponse._paging.next;
-        const rawPosts = postsResponse;
-        const resultPosts: Models.PostSnapshot[] = rawPosts.map(this.convertPost)
-        return { kind: "ok", posts: resultPosts }
-      } catch (err) {
-        // alert(err.message)
-        return { kind: "bad-data" }
-      }
-    }
-    return { kind: "rejected" }
   }
 
 

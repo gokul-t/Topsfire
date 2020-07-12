@@ -42,7 +42,7 @@ export const BaseLayout: Component<BaseLayoutProps> = props => {
           titleStyle={styles.HEADER_TITLE}
           {...headerProps}
         /> : null}
-        <SafeAreaView style={styles.screen}>
+        <SafeAreaView style={styles.SCREEN}>
           {children}
         </SafeAreaView>
       </Screen >

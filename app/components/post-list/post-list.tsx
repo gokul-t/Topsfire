@@ -1,13 +1,12 @@
 import React, { FunctionComponent as Component } from "react"
-import { View, FlatList } from "react-native"
+import { View, FlatList, FlatListProps } from "react-native"
 import { Text } from "../"
 import { observer, useObserver } from "mobx-react-lite"
-// import { useStores } from "../../models"
+import { useStores, Post } from "../../models"
 import { postListStyles as styles } from "./post-list.styles"
 
 export interface PostListProps {
-  posts: any,
-  refreshing: boolean
+
 }
 
 /**
@@ -15,7 +14,7 @@ export interface PostListProps {
  *
  * Component description here for TypeScript tips.
  */
-export const PostList: Component<PostListProps> = props => {
+export const PostList: Component = props => {
   // Note: if you want your componeobservernt to refresh when data is updated in the store,
   // wrap this component in `` like so:
   // `export const PostList = observer(function PostList { ... })`
@@ -25,21 +24,21 @@ export const PostList: Component<PostListProps> = props => {
   // or
   // const { otherStore, userStore } = useStores()
 
-  const { posts = [], refreshing } = props;
+  const { data, refreshing , onRefresh, onEndReached} = props;
 
   const renderItem = () => <Text>HII</Text>
 
   return useObserver(() => (
     <FlatList
-      data={posts}
-      // onRefresh={fetchPosts}
+      data={data}
       refreshing={refreshing}
-      // onEndReached={handleLoadMore}
+      onRefresh={onRefresh}
+      onEndReached={onEndReached}
       onEndReachedThreshold={10}
       // ListFooterComponent={renderFooter}
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
-      extraData={posts}
+      extraData={data}
     />
   ))
 }

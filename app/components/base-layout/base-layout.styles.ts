@@ -24,6 +24,6 @@ export const baseLayoutStyles = {
     letterSpacing: 1.5,
   } as TextStyle,
   SCREEN: {
-    marginBottom: 10
+    marginBottom: 60
   } as ViewStyle
 }
