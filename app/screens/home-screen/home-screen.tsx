@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { Button, View, ViewStyle, TextStyle } from "react-native"
 // import { useNavigation } from "@react-navigation/native"
 
-import { Screen, Text, Header, Wallpaper, BaseLayout } from "../../components"
+import { Screen, Text, Header, Wallpaper, BaseLayout , PostList } from "../../components"
 import { color, spacing } from "../../theme"
 
 // import { useStores } from "../models"
@@ -27,6 +27,7 @@ export const HomeScreen: Component<HomeScreenParams> = observer(function HomeScr
       leftIcon: "menu",
       onLeftPress: () => drawerNavigation.toggleDrawer()
     }} >
+      <PostList></PostList>
     </BaseLayout >
   )
 })

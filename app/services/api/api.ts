@@ -1,17 +1,24 @@
 import { ApisauceInstance, create, ApiResponse } from "apisauce"
+import WPAPI, { WPRequest } from "wpapi";
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
-
+import * as Models from "../../models"
+import * as Utils from "../../utils"
 /**
  * Manages all requests to the API.
  */
+let postsResponse: WPRequest = null;
+
 export class Api {
   /**
    * The underlying apisauce instance which performs the requests.
    */
   apisauce: ApisauceInstance
-
+  /**
+   * The underlying WPAPI instrance which perform the requests
+   */
+  wp: WPAPI
   /**
    * Configurable options.
    */
@@ -42,7 +49,88 @@ export class Api {
         Accept: "application/json",
       },
     })
+    this.wp = new WPAPI({ endpoint: this.config.url });
   }
+
+  /**
+ * Gets a list of users.
+ */
+  async getCategories(): Promise<Types.GetCategoryResult> {
+    // make the api call
+
+    const convertCategory = raw => {
+      return {
+        id: String(raw.id),
+        name: raw.name,
+        count: raw.count,
+        description: raw.description,
+        link: raw.link,
+        slug: raw.slug,
+        taxonomy: raw.taxonomy,
+        parent: raw.parent
+      }
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const response = await Utils.getAll(this.wp.categories().param("hide_empty", "true").perPage(100));
+      const rawCategories = response;
+      const resultCategories: Models.CategorySnapshot[] = rawCategories.map(convertCategory)
+      return { kind: "ok", categories: resultCategories }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  convertPost = raw => {
+    const featured_media = raw._embedded["wp:featuredmedia"] || [];
+
+    const convertFeaturedMedia = (m) => {
+      return ({
+        medium: m.media_details.sizes.medium.source_url,
+        large: m.media_details.sizes.large.source_url,
+        thumbnail: m.media_details.sizes.thumbnail.source_url,
+        source_url: m.source_url
+      })
+    }
+
+    return {
+      id: String(raw.id),
+      date: raw.date,
+      title: raw.title,
+      content : raw.content,
+      status: raw.status,
+      featured_media: featured_media.map(convertFeaturedMedia),
+      categories: raw.categories
+    }
+  }
+  async getPosts({ categoryId }): Promise<Types.GetPostsResult> {
+    try {
+      const request = categoryId ? this.wp.posts().category(categoryId) : this.wp.posts();
+      postsResponse = await request.embed()
+      const rawPosts = postsResponse;
+      const resultPosts: Models.PostSnapshot[] = rawPosts.map(this.convertPost)
+      return { kind: "ok", posts: resultPosts }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  async loadMorePosts(): Promise<Types.GetPostsResult> {
+    if (postsResponse && postsResponse._paging && postsResponse._paging.next) {
+      try {
+        postsResponse = await postsResponse._paging.next;
+        const rawPosts = postsResponse;
+        const resultPosts: Models.PostSnapshot[] = rawPosts.map(this.convertPost)
+        return { kind: "ok", posts: resultPosts }
+      } catch (err) {
+        // alert(err.message)
+        return { kind: "rejected" }
+      }
+    }
+    return { kind: "bad-data" }
+  }
+
 
   /**
    * Gets a list of users.

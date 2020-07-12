@@ -1,6 +1,6 @@
 import React, { FunctionComponent as Component } from "react"
-import { View } from "react-native"
-import { Screen, Header, Wallpaper } from "../"
+import { View , SafeAreaView } from "react-native"
+import { Screen, Header, Wallpaper} from "../"
 import { HeaderProps } from "../header/header.propss"
 import { color, spacing } from "../../theme"
 import { observer, useObserver } from "mobx-react-lite"
@@ -25,7 +25,7 @@ export const BaseLayout: Component<BaseLayoutProps> = props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
-  const { headerProps } = props;
+  const { headerProps, children } = props;
   return useObserver(() => (
     <View style={styles.FULL}>
       <Wallpaper />
@@ -35,6 +35,9 @@ export const BaseLayout: Component<BaseLayoutProps> = props => {
           titleStyle={styles.HEADER_TITLE}
           {...headerProps}
         /> : null}
+        <SafeAreaView >
+          {children}
+        </SafeAreaView>
       </Screen >
     </View>
   ))
