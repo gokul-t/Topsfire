@@ -1,10 +1,11 @@
-import React, { FunctionComponent as Component } from "react"
+import React, { FunctionComponent as Component, useCallback, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Screen, Text, BaseLayout } from "../../components"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../models"
+import { ViewStyle, FlatList, TouchableOpacity, Alert } from "react-native"
+import { Screen, Text, BaseLayout, BulletItem } from "../../components"
+import { useNavigation } from "@react-navigation/native"
+import { useStores } from "../../models"
 import { color } from "../../theme"
+
 
 type CategoriesScreenParams = {
   navigation: any
@@ -12,18 +13,66 @@ type CategoriesScreenParams = {
 
 export const CategoriesScreen: Component<CategoriesScreenParams> = observer(function CategoriesScreen({ navigation: drawerNavigation }) {
   // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+  const { categoryStore } = useStores()
+  const [loading, setLoading] = useState(false);
   // OR
   // const rootStore = useStores()
-
   // Pull in navigation via hook
-  // const navigation = useNavigation()
+  const navigation = useNavigation()
+  const goCategoryPostsScreen = (item) => navigation.navigate("categoryPosts", {
+    categoryId: item.id
+  })
+  const { categories, getCategories, loadMoreCategories, nextPage } = categoryStore;
+  const fetchCategories = useCallback(async () => {
+    if (!loading) {
+      setLoading(true)
+      try {
+        await getCategories()
+      } catch (error) {
+        __DEV__ && console.tron.log(error);
+      }
+      setLoading(false)
+    }
+  }, [loading])
+
+  const handleLoadMore = useCallback(async () => {
+    if (!loading && nextPage) {
+      setLoading(true)
+      try {
+        await loadMoreCategories();
+      } catch (error) {
+        __DEV__ && console.tron.log(error);
+      }
+      setLoading(false)
+    }
+  }, [loading, nextPage]);
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  const renderItem = useCallback(({ item }) => <TouchableOpacity key={item.id} onPress={() => goCategoryPostsScreen(item)}>
+    <BulletItem text={item.name} />
+  </TouchableOpacity>, [])
+
   return (
     <BaseLayout headerProps={{
       headerTx: "categoriesScreen.header",
       leftIcon: "menu",
       onLeftPress: () => drawerNavigation.toggleDrawer()
-    }} >
+    }}
+    >
+      <FlatList
+        data={categories}
+        onRefresh={fetchCategories}
+        refreshing={loading}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        // ListFooterComponent={renderFooter}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        extraData={categories}
+      />
     </BaseLayout >
   )
 })

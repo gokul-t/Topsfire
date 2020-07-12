@@ -7,7 +7,7 @@
 import React from "react"
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
-import { WelcomeScreen, DemoScreen, HomeScreen, CategoriesScreen } from "../screens"
+import { WelcomeScreen, DemoScreen, HomeScreen, CategoriesScreen, CategoryPostsScreen } from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -24,12 +24,28 @@ import { WelcomeScreen, DemoScreen, HomeScreen, CategoriesScreen } from "../scre
 export type PrimaryParamList = {
   home: undefined
   categories: undefined,
-  welcome : undefined,
-  demo : undefined
+  welcome: undefined,
+  demo: undefined
 }
 
+export type CategroryStackParamList = {
+  categories: undefined,
+  categoryPosts: undefined
+}
 // Documentation: https://github.com/software-mansion/react-native-screens/tree/master/native-stack
 const Drawer = createDrawerNavigator<PrimaryParamList>()
+const CategroryStack = createNativeStackNavigator<CategroryStackParamList>()
+
+export function CategroryStackNavigator() {
+  return <CategroryStack.Navigator screenOptions={{
+    headerShown: false,
+    gestureEnabled: true,
+  }}
+    initialRouteName="categories">
+    <CategroryStack.Screen name="categories" component={CategoriesScreen} />
+    <CategroryStack.Screen name="categoryPosts" component={CategoryPostsScreen} />
+  </CategroryStack.Navigator>
+}
 
 export function PrimaryNavigator() {
   return (
@@ -40,7 +56,7 @@ export function PrimaryNavigator() {
       }}
       initialRouteName="home">
       <Drawer.Screen name="home" component={HomeScreen} />
-      <Drawer.Screen name="categories" component={CategoriesScreen} />
+      <Drawer.Screen name="categories" component={CategroryStackNavigator} />
       <Drawer.Screen name="welcome" component={WelcomeScreen} />
       <Drawer.Screen name="demo" component={DemoScreen} />
     </Drawer.Navigator>
@@ -56,5 +72,5 @@ export function PrimaryNavigator() {
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["welcome","home"]
+const exitRoutes = ["welcome", "home"]
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

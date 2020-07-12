@@ -55,9 +55,9 @@ export class Api {
   /**
  * Gets a list of users.
  */
-  async getCategories(): Promise<Types.GetCategoryResult> {
+  async getCategories(page = 1): Promise<Types.GetCategoryResult> {
     // make the api call
-
+    // transform the data into the format we are expecting
     const convertCategory = raw => {
       return {
         id: String(raw.id),
@@ -70,13 +70,17 @@ export class Api {
         parent: raw.parent
       }
     }
-
-    // transform the data into the format we are expecting
     try {
-      const response = await Utils.getAll(this.wp.categories().param("hide_empty", "true").perPage(100));
+      // wp-json/wp/v2/categories?hide_empty=true&per_page=15
+      const response: WPRequest = await this.wp.categories().param("hide_empty", "true").page(page).perPage(15);
       const rawCategories = response;
       const resultCategories: Models.CategorySnapshot[] = rawCategories.map(convertCategory)
-      return { kind: "ok", categories: resultCategories }
+      return {
+        kind: "ok",
+        categories: resultCategories,
+        total: response._paging.total,
+        totalPages: response._paging.totalPages
+      }
     } catch {
       return { kind: "bad-data" }
     }
@@ -98,7 +102,7 @@ export class Api {
       id: String(raw.id),
       date: raw.date,
       title: raw.title,
-      content : raw.content,
+      content: raw.content,
       status: raw.status,
       featured_media: featured_media.map(convertFeaturedMedia),
       categories: raw.categories
@@ -125,10 +129,10 @@ export class Api {
         return { kind: "ok", posts: resultPosts }
       } catch (err) {
         // alert(err.message)
-        return { kind: "rejected" }
+        return { kind: "bad-data" }
       }
     }
-    return { kind: "bad-data" }
+    return { kind: "rejected" }
   }
 
 

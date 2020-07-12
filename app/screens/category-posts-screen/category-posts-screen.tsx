@@ -1,10 +1,10 @@
 import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
-import { Screen, Text } from "../components"
+import { Screen, Text , BaseLayout} from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
-import { color } from "../theme"
+import { color } from "../../theme"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
@@ -19,8 +19,10 @@ export const CategoryPostsScreen: Component = observer(function CategoryPostsScr
   // Pull in navigation via hook
   // const navigation = useNavigation()
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" tx="categoryPostsScreen.header" />
-    </Screen>
+    <BaseLayout headerProps={{
+      headerText: "categoriesScreen.header",
+    }} >
+    
+    </BaseLayout >
   )
 })
