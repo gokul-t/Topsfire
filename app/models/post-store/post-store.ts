@@ -21,6 +21,11 @@ export const PostStoreModel = types
     }
   }))  // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
+    find: (postId: string): Post => {
+      const post = self.posts.find(c => c.id == postId);
+      __DEV__ && console.tron.log(self.posts, postId);
+      return post;
+    },
     savePosts: (postSnapShots: PostStoreSnapshot[], total, totalPages) => {
       const postModels: Post[] = postSnapShots.map(c => PostModel.create(c))
       self.currentPage = 1;
