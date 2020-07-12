@@ -5,9 +5,9 @@
  * You'll likely spend most of your time in this file.
  */
 import React from "react"
-
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
-import { WelcomeScreen, DemoScreen } from "../screens"
+import { WelcomeScreen, DemoScreen, HomeScreen, CategoriesScreen, CategoryPostsScreen, PostScreen } from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -21,25 +21,65 @@ import { WelcomeScreen, DemoScreen } from "../screens"
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
-export type PrimaryParamList = {
-  welcome: undefined
-  demo: undefined
-}
 
 // Documentation: https://github.com/software-mansion/react-native-screens/tree/master/native-stack
-const Stack = createNativeStackNavigator<PrimaryParamList>()
+const Drawer = createDrawerNavigator<PrimaryParamList>()
+const CategroryStack = createNativeStackNavigator<CategroryStackParamList>()
+const HomeStack = createNativeStackNavigator<HomeStackParamList>()
+
+export type CategroryStackParamList = {
+  categories: undefined,
+  categoryPosts: undefined,
+  post: undefined
+}
+
+export function CategroryStackNavigator() {
+  return <CategroryStack.Navigator screenOptions={{
+    headerShown: false,
+    gestureEnabled: true,
+  }}
+    initialRouteName="categories">
+    <CategroryStack.Screen name="categories" component={CategoriesScreen} />
+    <CategroryStack.Screen name="categoryPosts" component={CategoryPostsScreen} />
+    <CategroryStack.Screen name="post" component={PostScreen} />
+  </CategroryStack.Navigator>
+}
+export type HomeStackParamList = {
+  home: undefined,
+  post: undefined
+}
+
+export function HomeStackNavigator() {
+  return <HomeStack.Navigator screenOptions={{
+    headerShown: false,
+    gestureEnabled: true,
+  }}
+    initialRouteName="home">
+    <HomeStack.Screen name="home" component={HomeScreen} />
+    <HomeStack.Screen name="post" component={PostScreen} />
+  </HomeStack.Navigator>
+}
+
+export type PrimaryParamList = {
+  home: undefined
+  categories: undefined,
+  // welcome: undefined,
+  // demo: undefined
+}
 
 export function PrimaryNavigator() {
   return (
-    <Stack.Navigator
+    <Drawer.Navigator
       screenOptions={{
-        headerShown: false,
+        // headerShown: false,
         gestureEnabled: true,
       }}
-    >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-    </Stack.Navigator>
+      initialRouteName="home">
+      <Drawer.Screen name="home" component={HomeStackNavigator} />
+      <Drawer.Screen name="categories" component={CategroryStackNavigator} />
+      {/* <Drawer.Screen name="welcome" component={WelcomeScreen} /> */}
+      {/* <Drawer.Screen name="demo" component={DemoScreen} /> */}
+    </Drawer.Navigator>
   )
 }
 
@@ -52,5 +92,5 @@ export function PrimaryNavigator() {
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["welcome"]
+const exitRoutes = ["welcome", "home"]
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

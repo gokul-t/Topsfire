@@ -1,2 +1,6 @@
 export * from "./welcome-screen/welcome-screen"
 export * from "./demo-screen/demo-screen"
+export * from "./home-screen/home-screen"
+export * from "./categories-screen/categories-screen"
+export * from "./category-posts-screen/category-posts-screen"
+export * from "./post-screen/post-screen"
