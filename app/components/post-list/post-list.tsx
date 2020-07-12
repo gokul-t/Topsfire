@@ -1,12 +1,16 @@
-import React, { FunctionComponent as Component } from "react"
+import React, { FunctionComponent as Component, useCallback, useEffect, useState } from "react"
 import { View, FlatList, FlatListProps } from "react-native"
-import { Text } from "../"
+import { Text, PostCard } from "../"
 import { observer, useObserver } from "mobx-react-lite"
-import { useStores, Post } from "../../models"
+// import { useStores, PostStore, PostStoreSnapshot } from "../../models"
 import { postListStyles as styles } from "./post-list.styles"
 
 export interface PostListProps {
-
+  posts: any,
+  getPosts: any,
+  loadMorePosts: any,
+  nextPage: boolean,
+  categoryId:string
 }
 
 /**
@@ -14,7 +18,7 @@ export interface PostListProps {
  *
  * Component description here for TypeScript tips.
  */
-export const PostList: Component = props => {
+export const PostList: Component<PostListProps> = props => {
   // Note: if you want your componeobservernt to refresh when data is updated in the store,
   // wrap this component in `` like so:
   // `export const PostList = observer(function PostList { ... })`
@@ -23,22 +27,51 @@ export const PostList: Component = props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
+  const { posts = [], getPosts, loadMorePosts, nextPage, categoryId  } = props;
 
-  const { data, refreshing , onRefresh, onEndReached} = props;
+  const [loading, setLoading] = useState(false);
 
-  const renderItem = () => <Text>HII</Text>
+  const fetchPost = useCallback(async () => {
+    if (!loading) {
+      setLoading(true)
+      try {
+        await getPosts({ categoryId })
+      } catch (error) {
+        __DEV__ && console.tron.log(error);
+      }
+      setLoading(false)
+    }
+  }, [loading])
+
+  const handleLoadMore = useCallback(async () => {
+    if (!loading && nextPage) {
+      setLoading(true)
+      try {
+        await loadMorePosts({ categoryId });
+      } catch (error) {
+        __DEV__ && console.tron.log(error);
+      }
+      setLoading(false)
+    }
+  }, [loading, nextPage]);
+
+  useEffect(() => {
+    fetchPost()
+  }, [])
+
+  const renderItem = useCallback((renderItemProps) => <PostCard {...renderItemProps}></PostCard>, [])
 
   return useObserver(() => (
     <FlatList
-      data={data}
-      refreshing={refreshing}
-      onRefresh={onRefresh}
-      onEndReached={onEndReached}
+      data={posts}
+      refreshing={loading}
+      onRefresh={fetchPost}
+      onEndReached={handleLoadMore}
       onEndReachedThreshold={10}
       // ListFooterComponent={renderFooter}
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
-      extraData={data}
+      extraData={posts}
     />
   ))
 }

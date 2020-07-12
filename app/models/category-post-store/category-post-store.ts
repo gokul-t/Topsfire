@@ -11,11 +11,13 @@ export const CategoryPostStoreModel = types
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
-    getPostStore: (categoryId: string) => {
-      const postStore = self.categoryPostStores.get(categoryId);
-      if (postStore)
-        return postStore;
-      return self.categoryPostStores.set(categoryId,PostStoreModel.create())
+    getPostStore: (categoryId: string): PostStore => {
+      const finded: PostStore = self.categoryPostStores.get(categoryId);
+      if (finded)
+        return finded;
+      const postStore: PostStore = PostStoreModel.create();
+      self.categoryPostStores.set(categoryId, postStore)
+      return postStore;
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
