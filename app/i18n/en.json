@@ -20,6 +20,12 @@
     "androidReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running, run adb reverse tcp:9090 tcp:9090 from your terminal, and reload the app.",
     "iosReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app."
   },
+  "homeScreen" :{
+    "header" : "Home"
+  },
+  "categoriesScreen" :{
+    "header" : "Categories"
+  },
   "storybook": {
     "placeholder": "Placeholder",
     "field": "Field"
