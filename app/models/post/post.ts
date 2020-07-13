@@ -1,5 +1,9 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { CategoryModel, Category } from "../category/category"
+import moment from "moment"
+import { titleCase } from "../../utils"
+const config = require("../../config/env")
+
 /**
  * Model description here for TypeScript hints.
  */
@@ -23,10 +27,17 @@ export const PostModel = types
     title: RenderModel,
     content: RenderModel,
     status: types.string,
+    link: types.string,
     featured_media: types.optional(types.array(FeaturedMediaModel), []),
     categories: types.array(types.reference(types.late(() => CategoryModel))),
   })
   .views(self => ({
+    get titleCase() {
+      return self.title.rendered ? titleCase(self.title.rendered) : null;
+    },
+    get formattedDate() {
+      return self.date ? moment(self.date).format('d MMM Y') : null;
+    },
     get imageUrl() {
       if (self.featured_media.length) {
         const media = self.featured_media.find(m => !!m.source_url);
@@ -35,6 +46,11 @@ export const PostModel = types
       return null;
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    get formattedTitle() {
+      return (config.titleCase ? self.titleCase : self.title.rendered).trim();
+    }
+  }))
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**

@@ -1,6 +1,7 @@
 import React, { FunctionComponent as Component } from "react"
 import { View, Text, TouchableOpacity, Image } from "react-native"
 import { useNavigation } from "@react-navigation/native"
+import { Avatar, Button, Card, Subheading, Paragraph } from 'react-native-paper';
 
 // import { Text } from "../"
 import { observer, useObserver } from "mobx-react-lite"
@@ -32,23 +33,28 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
     postId: item.id,
     screenCatId
   })
+  //   <Image
+  //   source={item.imageUrl ? {
+  //     uri: item.imageUrl
+  //   } : null}
+  //   style={{
+  //     height: 75,
+  //     width: 75,
+  //     borderRadius: 10
+  //   }}
+  // />
+
+
+
   return useObserver(() => (
     <TouchableOpacity style={styles.listItemAreas} onPress={goPostScreen}>
-      <View>
-        <Image
-          source={item.imageUrl ? {
-            uri: item.imageUrl
-          } : null}
-          style={{
-            height: 75,
-            width: 75,
-            borderRadius: 10
-          }}
-        />
-      </View>
-      <View style={styles.listTextArea}>
-        <Text style={styles.listTitle} numberOfLines={2}>{item.title.rendered}</Text>
-      </View>
+      <Card elevation={12}>
+        <Card.Cover source={{ uri: item.imageUrl }} />
+        <Card.Content>
+          <Subheading>{item.formattedTitle}</Subheading>
+          <Paragraph>Published on:  {item.formattedDate}</Paragraph>
+        </Card.Content>
+      </Card>
     </TouchableOpacity>
   ))
 })
