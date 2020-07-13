@@ -1,8 +1,10 @@
 import React, { FunctionComponent as Component, useCallback, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle, FlatList, TouchableOpacity, Alert } from "react-native"
-import { Screen, Text, BaseLayout, BulletItem } from "../../components"
 import { useNavigation } from "@react-navigation/native"
+import { List } from 'react-native-paper';
+
+import { Screen, Text, BaseLayout, BulletItem } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 
@@ -51,9 +53,12 @@ export const CategoriesScreen: Component<CategoriesScreenParams> = observer(func
     fetchCategories()
   }, [])
 
-  const renderItem = useCallback(({ item }) => <TouchableOpacity key={item.id} onPress={() => goCategoryPostsScreen(item)}>
-    <BulletItem text={item.name} />
-  </TouchableOpacity>, [])
+  const renderItem = useCallback(({ item }) => <List.Item
+    title={item.name}
+    description={item.description}
+    left={props => <List.Icon {...props} icon="folder" />}
+    key={item.id} onPress={() => goCategoryPostsScreen(item)}
+  />, [])
 
   return (
     <BaseLayout headerProps={{

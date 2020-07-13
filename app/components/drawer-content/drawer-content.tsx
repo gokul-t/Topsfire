@@ -41,7 +41,9 @@ export function DrawerContent(props: Props) {
 
 
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView {...props} style={[props.style, {
+      backgroundColor: paperTheme.colors.primary,
+    }]}>
       <Animated.View
         //@ts-ignore
         style={[
@@ -52,7 +54,9 @@ export function DrawerContent(props: Props) {
           },
         ]}
       >
-        <View style={styles.userInfoSection}>
+        <View style={[styles.userInfoSection, {
+          backgroundColor: paperTheme.colors.primary,
+        }]}>
           <TouchableOpacity
             style={{ marginLeft: 10 }}
             onPress={() => {
@@ -69,7 +73,7 @@ export function DrawerContent(props: Props) {
               }}
             />
           </TouchableOpacity>
-          <Title style={styles.title}>{config.name}</Title>
+          <Title style={styles.title}>{config.displayName}</Title>
           <Caption style={styles.caption}>{config.tagLine}</Caption>
         </View>
         <Drawer.Section style={styles.drawerSection}>
@@ -86,7 +90,7 @@ export function DrawerContent(props: Props) {
           />
           <DrawerItem
             icon={({ color, size }) => (
-              <MaterialCommunityIcons name="tune" color={color} size={size} />
+              <MaterialCommunityIcons name="format-list-bulleted-square" color={color} size={size} />
             )}
             label="Categories"
             onPress={() => props.navigation.navigate("categories")}
@@ -123,17 +127,30 @@ export function DrawerContent(props: Props) {
         <Drawer.Section title="Follow Us">
           <TouchableRipple onPress={() => { }}>
             <View style={styles.preference}>
-              <Text>Facebook</Text>
+              <Text><MaterialCommunityIcons
+                name="facebook"
+              />  Facebook</Text>
             </View>
           </TouchableRipple>
           <TouchableRipple onPress={() => { }}>
             <View style={styles.preference}>
-              <Text>Youtube</Text>
+              <Text><MaterialCommunityIcons
+                name="youtube"
+              />  Youtube</Text>
             </View>
           </TouchableRipple>
           <TouchableRipple onPress={() => { }}>
             <View style={styles.preference}>
-              <Text>Twitter</Text>
+              <Text><MaterialCommunityIcons
+                name="twitter"
+              />  Twitter</Text>
+            </View>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => { }}>
+            <View style={styles.preference}>
+              <Text><MaterialCommunityIcons
+                name="search-web"
+              />  Website</Text>
             </View>
           </TouchableRipple>
         </Drawer.Section>

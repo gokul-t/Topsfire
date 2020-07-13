@@ -3,6 +3,7 @@ import { CategoryModel, Category } from "../category/category"
 import moment from "moment"
 import { titleCase } from "../../utils"
 import config from "../../config"
+import _ from "lodash";
 
 /**
  * Model description here for TypeScript hints.
@@ -33,7 +34,7 @@ export const PostModel = types
   })
   .views(self => ({
     get titleCase() {
-      return self.title.rendered ? titleCase(self.title.rendered) : null;
+      return titleCase(_.get(self, "title.rendered"));
     },
     get formattedDate() {
       return self.date ? moment(self.date).format(config.dateFormat) : null;

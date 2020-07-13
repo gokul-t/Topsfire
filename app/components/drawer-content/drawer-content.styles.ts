@@ -6,13 +6,15 @@ export const drawerContentStyles = StyleSheet.create({
     flex: 1,
   },
   userInfoSection: {
-    paddingLeft: 20,
+    padding: 20,
   },
   title: {
+    color: color.palette.white,
     marginTop: 20,
     fontWeight: 'bold',
   },
   caption: {
+    color: color.palette.white,
     fontSize: 14,
     lineHeight: 14,
   },

@@ -6,6 +6,7 @@ import { Button, View, ViewStyle, TextStyle, FlatList } from "react-native"
 import { Screen, Text, Header, Wallpaper, BaseLayout, PostList } from "../../components"
 import { color, spacing } from "../../theme"
 import { useStores } from "../../models"
+import config from "../../config"
 
 type HomeScreenParams = {
   navigation: any
@@ -23,7 +24,7 @@ export const HomeScreen: Component<HomeScreenParams> = observer(function HomeScr
 
   return (
     <BaseLayout headerProps={{
-      headerTx: "homeScreen.header",
+      headerText: config.displayName,
       leftIcon: "menu",
       onLeftPress: () => drawerNavigation.toggleDrawer()
     }} >
