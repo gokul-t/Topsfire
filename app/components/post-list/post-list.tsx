@@ -10,7 +10,7 @@ export interface PostListProps {
   getPosts: any,
   loadMorePosts: any,
   nextPage: boolean,
-  categoryId:string
+  categoryId?: string
 }
 
 /**
@@ -27,7 +27,7 @@ export const PostList: Component<PostListProps> = props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
-  const { posts = [], getPosts, loadMorePosts, nextPage, categoryId  } = props;
+  const { posts = [], getPosts, loadMorePosts, nextPage, categoryId } = props;
 
   const [loading, setLoading] = useState(false);
 
@@ -59,7 +59,7 @@ export const PostList: Component<PostListProps> = props => {
     fetchPost()
   }, [])
 
-  const renderItem = useCallback((renderItemProps) => <PostCard {...renderItemProps}></PostCard>, [])
+  const renderItem = useCallback((renderItemProps) => <PostCard screenCatId={categoryId} {...renderItemProps}></PostCard>, [])
 
   return useObserver(() => (
     <FlatList

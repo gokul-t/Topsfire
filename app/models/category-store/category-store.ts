@@ -20,9 +20,8 @@ export const CategoryStoreModel = types
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
-    find : (categoryId:string)=>{
-      const category =  self.categories.find(c=>c.id===categoryId);
-      __DEV__ && console.tron.log("re fetching categories");
+    find: (categoryId: string) => {
+      const category = self.categories.find(c => c.id === categoryId);
       return category;
     },
     saveCategories: (categorySnapShots: CategoryStoreSnapshot[], total, totalPages) => {

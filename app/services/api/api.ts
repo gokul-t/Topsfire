@@ -90,10 +90,11 @@ export class Api {
 
     const convertFeaturedMedia = (m, i) => {
       return ({
-        medium: _.get(m,"media_details.sizes.medium.source_url"),
-        large: _.get(m,"media_details.sizes.large.source_url"),
-        thumbnail: _.get(m,"media_details.sizes.thumbnail.source_url"),
-        source_url: _.get(m,"source_url")
+        id: String(m.id),
+        medium: _.get(m, "media_details.sizes.medium.source_url"),
+        large: _.get(m, "media_details.sizes.large.source_url"),
+        thumbnail: _.get(m, "media_details.sizes.thumbnail.source_url"),
+        source_url: _.get(m, "source_url")
       })
     }
 

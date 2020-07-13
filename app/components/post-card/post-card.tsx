@@ -8,16 +8,10 @@ import { useStores, Post } from "../../models"
 import { postCardStyles as styles } from "./post-card.styles"
 
 export interface PostCardProps {
-  item: Post
+  item: Post,
+  screenCatId: string
 }
 
-const getImageUrl = i => {
-  if (i.featured_media.length) {
-    const media = i.featured_media.find(m => m.source_url);
-    return media.medium || media.thumbnail || media.source_url;
-  }
-  return null;
-}
 /**
  * This is a React functional component, ready to 
  *
@@ -33,17 +27,17 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
-  const { item } = props;
+  const { item, screenCatId } = props;
   const goPostScreen = () => navigation.navigate("post", {
-    postId: item.id
+    postId: item.id,
+    screenCatId
   })
-  const imageUrl = getImageUrl(item);
   return useObserver(() => (
     <TouchableOpacity style={styles.listItemAreas} onPress={goPostScreen}>
       <View>
         <Image
-          source={imageUrl ? {
-            uri: imageUrl
+          source={item.imageUrl ? {
+            uri: item.imageUrl
           } : null}
           style={{
             height: 75,
