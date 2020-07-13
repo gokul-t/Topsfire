@@ -6,6 +6,7 @@ import { CategoryModel, Category } from "../category/category"
 
 
 export const FeaturedMediaModel = types.model("media").props({
+  id: types.identifier,
   medium: types.maybeNull(types.string),
   large: types.maybeNull(types.string),
   thumbnail: types.maybeNull(types.string),
@@ -25,7 +26,15 @@ export const PostModel = types
     featured_media: types.optional(types.array(FeaturedMediaModel), []),
     categories: types.array(types.reference(types.late(() => CategoryModel))),
   })
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    get imageUrl() {
+      if (self.featured_media.length) {
+        const media = self.featured_media.find(m => !!m.source_url);
+        return media.medium || media.thumbnail || media.source_url;
+      }
+      return null;
+    }
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**

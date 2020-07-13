@@ -1,8 +1,10 @@
 import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Screen, Text, BaseLayout } from "../../components"
+import { Image, View, ViewStyle, Dimensions } from "react-native"
+import HTML from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native"
+import moment from "moment"
+import { Screen, Text, BaseLayout } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 
@@ -39,11 +41,50 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
   const ps = screenCatId ? categoryPostStore.getPostStore(screenCatId) : postStore;
   const post = ps.find(postId);
 
+  if (!post)
+    return <BaseLayout headerProps={{
+      headerText: "Post"
+    }} screenProps={{ preset: "scroll" }} >
+      <Text >Go Back</Text>
+    </BaseLayout>
+  const windowWidth = Dimensions.get('window').width;
   return (
     <BaseLayout headerProps={{
       headerText: post ? post.title.rendered : null
     }} screenProps={{ preset: "scroll" }}>
-      <Text text={post.content.rendered}></Text>
+      {post.date ? <Text >Published on: {moment(post.date).format('d MMM Y')}</Text> : null}
+      <Image
+        source={post.imageUrl ? {
+          uri: post.imageUrl
+        } : null}
+        style={{
+          height: 250,
+          width: windowWidth * .9,
+          borderRadius: 10
+        }}
+      />
+      {/* <Text text={post.content.rendered}></Text> */}
+      <HTML
+        html={post.content.rendered}
+        imagesMaxWidth={windowWidth}
+        staticContentMaxWidth={windowWidth}
+        alterChildren={node => {
+          if (node.name === "iframe" || node.name === "img") {
+            delete node.attribs.width;
+            delete node.attribs.height;
+          }
+          return node.children;
+        }}
+        onLinkPress={(evt, href) => (href)}
+        listsPrefixesRenderers={{
+          ul: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
+            return <View style={{ padding: 0, margin: 0 }} />
+          },
+          li: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
+            return <View style={{ padding: 0, margin: 0 }} />
+          },
+        }}
+      />
     </BaseLayout >
   )
 })
