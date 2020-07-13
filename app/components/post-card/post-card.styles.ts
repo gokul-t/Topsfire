@@ -10,20 +10,15 @@ export const postCardStyles = {
     fontSize: 14,
     color: color.primary
   } as TextStyle,
-  listItemAreas: {
+  CARD: {
     margin: 15,
     flex: 1,
     flexDirection: 'row',
     backgroundColor: color.palette.white
   } as ViewStyle,
-  listTextArea: {
+  CardContent: {
     paddingHorizontal: 10,
     marginHorizontal: 5,
     flex: 1,
-  } as ViewStyle,
-  listTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    lineHeight: 25,
-  } as TextStyle,
+  } as ViewStyle
 }

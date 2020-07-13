@@ -2,12 +2,13 @@ import React, { FunctionComponent as Component } from "react"
 import { View, SafeAreaView } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { Screen, Header, Wallpaper } from "../"
-import { HeaderProps } from "../header/header.propss"
-import { color, spacing } from "../../theme"
+import { HeaderProps } from "../header/header.props"
 import { observer, useObserver } from "mobx-react-lite"
 // import { useStores } from "../../models"
 import { baseLayoutStyles as styles } from "./base-layout.styles"
 import { ScreenProps } from "../screen/screen.props"
+import { Appbar } from 'react-native-paper';
+import { translate } from "../../i18n/"
 
 export interface BaseLayoutProps {
   headerProps?: HeaderProps,
@@ -34,18 +35,38 @@ export const BaseLayout: Component<BaseLayoutProps> = props => {
   return useObserver(() => (
     <View style={styles.FULL}>
       <Wallpaper />
-      <Screen style={styles.CONTAINER} backgroundColor={color.transparent} {...screenProps}>
-        {headerProps ? <Header
-          leftIcon="back"
-          onLeftPress={goBack}
-          style={styles.HEADER}
-          titleStyle={styles.HEADER_TITLE}
-          {...headerProps}
-        /> : null}
-        <SafeAreaView style={styles.SCREEN}>
+      <Screen style={styles.CONTAINER} {...screenProps}>
+        {headerProps ?
+          // <Header
+          //   leftIcon="back"
+          //   onLeftPress={goBack}
+          //   style={styles.HEADER}
+          //   titleStyle={styles.HEADER_TITLE}
+          //   {...headerProps}
+          // /> 
+          <AppHeader leftIcon="back" onLeftPress={goBack} {...headerProps}></AppHeader>
+          : null}
+        <SafeAreaView style={styles.SafeAreaView}>
           {children}
         </SafeAreaView>
       </Screen >
     </View>
   ))
+}
+
+
+function AppHeader(props) {
+  const { leftIcon = "back", onLeftPress, headerText, headerTx } = props;
+  const header = headerText || (headerTx && translate(headerTx)) || ""
+
+  return <Appbar.Header>
+    {leftIcon === "back" ? <Appbar.BackAction onPress={onLeftPress} /> : null}
+    {leftIcon === "menu" ? <Appbar.Action icon="menu" onPress={onLeftPress} /> : null}
+    <Appbar.Content
+      title={header}
+    // subtitle="Subtitle"
+    />
+    {/* <Appbar.Action icon="magnify" onPress={_handleSearch} /> */}
+    {/* <Appbar.Action icon="dots-vertical" onPress={_handleMore} /> */}
+  </Appbar.Header>
 }

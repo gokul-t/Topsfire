@@ -1,5 +1,6 @@
 import { ViewStyle, TextStyle } from "react-native"
 import { color, spacing } from "../../theme"
+
 const BOLD: TextStyle = { fontWeight: "bold" }
 
 export const baseLayoutStyles = {
@@ -8,9 +9,9 @@ export const baseLayoutStyles = {
   } as ViewStyle,
   CONTAINER: {
     backgroundColor: color.transparent,
-    paddingHorizontal: spacing[4],
+    // paddingHorizontal: spacing[4],
   } as ViewStyle,
-  BOLD: BOLD,
+  BOLD,
   HEADER: {
     paddingTop: spacing[3],
     paddingBottom: spacing[5] - 1,
@@ -23,7 +24,7 @@ export const baseLayoutStyles = {
     textAlign: "center",
     letterSpacing: 1.5,
   } as TextStyle,
-  SCREEN: {
+  SafeAreaView: {
     marginBottom: 60
   } as ViewStyle
 }

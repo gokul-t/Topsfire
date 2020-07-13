@@ -15,6 +15,7 @@ import "./utils/ignore-warnings"
 import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
 import { NavigationContainerRef } from "@react-navigation/native"
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
+import { Provider as PaperProvider } from 'react-native-paper';
 import * as storage from "./utils/storage"
 import {
   useBackButtonHandler,
@@ -49,7 +50,7 @@ const App: Component<{}> = () => {
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       setupRootStore().then(setRootStore)
     })()
   }, [])
@@ -64,11 +65,13 @@ const App: Component<{}> = () => {
   return (
     <RootStoreProvider value={rootStore}>
       <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-        <RootNavigator
-          ref={navigationRef}
-          initialState={initialNavigationState}
-          onStateChange={onNavigationStateChange}
-        />
+        <PaperProvider>
+          <RootNavigator
+            ref={navigationRef}
+            initialState={initialNavigationState}
+            onStateChange={onNavigationStateChange}
+          />
+        </PaperProvider>
       </SafeAreaProvider>
     </RootStoreProvider>
   )

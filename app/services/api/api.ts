@@ -107,13 +107,14 @@ export class Api {
         content: raw.content,
         status: raw.status,
         featured_media: Array.isArray(featured_media) ? featured_media.map(convertFeaturedMedia) : [],
-        categories: raw.categories
+        categories: raw.categories,
+        link: raw.link
       }
     }
 
     try {
       const request = categoryId ? this.wp.posts().category(categoryId) : this.wp.posts();
-      const response: WPRequest = await request.page(page).embed()
+      const response: WPRequest = await request.embed().order('desc').orderby('date').page(page)
       const rawPosts = response;
       const resultPosts: Models.PostSnapshot[] = rawPosts.map(convertPost)
       return {

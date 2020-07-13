@@ -1,10 +1,13 @@
 import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
-import { Image, View, ViewStyle, Dimensions } from "react-native"
+import { Alert, Image, View, ViewStyle, Dimensions, StyleSheet, Share, Text } from "react-native"
 import HTML from 'react-native-render-html';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from "@react-navigation/native"
-import moment from "moment"
-import { Screen, Text, BaseLayout } from "../../components"
+import { Card, Subheading, Paragraph, Surface, FAB } from 'react-native-paper';
+
+import AppJson from "../../../app"
+import { Screen, BaseLayout } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 
@@ -22,6 +25,16 @@ type PostScreenProps = {
     }
   }
 }
+
+const styles = StyleSheet.create({
+  fab: {
+    position: 'absolute',
+    marginRight: 16,
+    marginBottom: -26,
+    right: 0,
+    bottom: 0
+  },
+})
 
 export const PostScreen: Component<PostScreenProps> = observer(function PostScreen(props) {
   // Pull in one of our MST stores
@@ -50,41 +63,79 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
   const windowWidth = Dimensions.get('window').width;
   return (
     <BaseLayout headerProps={{
-      headerText: post ? post.title.rendered : null
+      headerText: post.formattedTitle
     }} screenProps={{ preset: "scroll" }}>
-      {post.date ? <Text >Published on: {moment(post.date).format('d MMM Y')}</Text> : null}
-      <Image
-        source={post.imageUrl ? {
-          uri: post.imageUrl
-        } : null}
-        style={{
-          height: 250,
-          width: windowWidth * .9,
-          borderRadius: 10
-        }}
-      />
-      {/* <Text text={post.content.rendered}></Text> */}
-      <HTML
-        html={post.content.rendered}
-        imagesMaxWidth={windowWidth}
-        staticContentMaxWidth={windowWidth}
-        alterChildren={node => {
-          if (node.name === "iframe" || node.name === "img") {
-            delete node.attribs.width;
-            delete node.attribs.height;
-          }
-          return node.children;
-        }}
-        onLinkPress={(evt, href) => (href)}
-        listsPrefixesRenderers={{
-          ul: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
-            return <View style={{ padding: 0, margin: 0 }} />
-          },
-          li: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
-            return <View style={{ padding: 0, margin: 0 }} />
-          },
-        }}
-      />
+      <View>
+        <FAB
+          style={styles.fab}
+          icon="share"
+          onPress={() => onShare(post.formattedTitle, post.link)}
+        />
+        <Image
+          source={{
+            uri: post.imageUrl
+          }}
+          // resizeMode="contain"
+          style={{
+            height: 200,
+            width: windowWidth
+          }}
+        />
+      </View>
+      <Card>
+        <Card.Content>
+          <Subheading>{post.formattedTitle}</Subheading>
+          <Paragraph>
+            <MaterialCommunityIcons name="clock" />
+            {` ${post.formattedDate}`}
+          </Paragraph>
+        </Card.Content>
+      </Card>
+      <View>
+        <HTML
+          html={post.content.rendered}
+          imagesMaxWidth={windowWidth}
+          staticContentMaxWidth={windowWidth}
+          alterChildren={node => {
+            if (node.name === "iframe" || node.name === "img") {
+              delete node.attribs.width;
+              delete node.attribs.height;
+            }
+            return node.children;
+          }}
+          onLinkPress={(evt, href) => (href)}
+          listsPrefixesRenderers={{
+            ul: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
+              return <View style={{ padding: 0, margin: 0 }} />
+            },
+            li: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
+              return <View style={{ padding: 0, margin: 0 }} />
+            },
+          }}
+        />
+      </View>
     </BaseLayout >
   )
 })
+
+
+const onShare = async (message?: string, url?: string) => {
+  try {
+    const result = await Share.share({
+      message,
+      url,
+      title: "Shared via " + AppJson.name
+    });
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        // shared with activity type of result.activityType
+      } else {
+        // shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // dismissed
+    }
+  } catch (error) {
+    Alert.alert(error.message);
+  }
+};
