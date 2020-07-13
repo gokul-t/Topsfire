@@ -54,8 +54,8 @@ export const CategoriesScreen: Component<CategoriesScreenParams> = observer(func
   }, [])
 
   const renderItem = useCallback(({ item }) => <List.Item
-    title={item.name}
-    description={item.description}
+    title={item.formattedName}
+    description={item.formattedDescription}
     left={props => <List.Icon {...props} icon="folder" />}
     key={item.id} onPress={() => goCategoryPostsScreen(item)}
   />, [])
