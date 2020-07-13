@@ -8,6 +8,7 @@ import React from "react"
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
 import { WelcomeScreen, DemoScreen, HomeScreen, CategoriesScreen, CategoryPostsScreen, PostScreen } from "../screens"
+import { DrawerContent } from "../components";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -70,6 +71,7 @@ export type PrimaryParamList = {
 export function PrimaryNavigator() {
   return (
     <Drawer.Navigator
+      drawerContent={props => <DrawerContent {...props} />}
       screenOptions={{
         // headerShown: false,
         gestureEnabled: true,

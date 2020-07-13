@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { CategoryModel, Category } from "../category/category"
 import moment from "moment"
 import { titleCase } from "../../utils"
-const config = require("../../config/env")
+import config from "../../config"
 
 /**
  * Model description here for TypeScript hints.
@@ -36,7 +36,7 @@ export const PostModel = types
       return self.title.rendered ? titleCase(self.title.rendered) : null;
     },
     get formattedDate() {
-      return self.date ? moment(self.date).format('d MMM Y') : null;
+      return self.date ? moment(self.date).format(config.dateFormat) : null;
     },
     get imageUrl() {
       if (self.featured_media.length) {

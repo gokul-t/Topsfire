@@ -114,7 +114,7 @@ export class Api {
 
     try {
       const request = categoryId ? this.wp.posts().category(categoryId) : this.wp.posts();
-      const response: WPRequest = await request.page(page).embed()
+      const response: WPRequest = await request.embed().order('desc').orderby('date').page(page)
       const rawPosts = response;
       const resultPosts: Models.PostSnapshot[] = rawPosts.map(convertPost)
       return {

@@ -2,6 +2,7 @@ import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, Image, View, ViewStyle, Dimensions, StyleSheet, Share, Text } from "react-native"
 import HTML from 'react-native-render-html';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from "@react-navigation/native"
 import { Card, Subheading, Paragraph, Surface, FAB } from 'react-native-paper';
 
@@ -84,7 +85,10 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
       <Card>
         <Card.Content>
           <Subheading>{post.formattedTitle}</Subheading>
-          <Paragraph>Published on:  {post.formattedDate}</Paragraph>
+          <Paragraph>
+            <MaterialCommunityIcons name="clock" />
+            {` ${post.formattedDate}`}
+          </Paragraph>
         </Card.Content>
       </Card>
       <View>

@@ -2,6 +2,7 @@ import React, { FunctionComponent as Component } from "react"
 import { View, Text, TouchableOpacity, Image } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { Avatar, Button, Card, Subheading, Paragraph } from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // import { Text } from "../"
 import { observer, useObserver } from "mobx-react-lite"
@@ -47,12 +48,15 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
 
 
   return useObserver(() => (
-    <TouchableOpacity style={styles.listItemAreas} onPress={goPostScreen}>
-      <Card elevation={12}>
+    <TouchableOpacity onPress={goPostScreen}>
+      <Card style={styles.CARD} elevation={12}>
         <Card.Cover source={{ uri: item.imageUrl }} />
-        <Card.Content>
+        <Card.Content style={styles.CardContent}>
           <Subheading>{item.formattedTitle}</Subheading>
-          <Paragraph>Published on:  {item.formattedDate}</Paragraph>
+          <Paragraph>
+            <MaterialCommunityIcons name="clock" />
+            {` ${item.formattedDate}`}
+          </Paragraph>
         </Card.Content>
       </Card>
     </TouchableOpacity>
