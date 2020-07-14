@@ -3,12 +3,11 @@ import { CategoryModel, Category } from "../category/category"
 import moment from "moment"
 import { titleCase } from "../../utils"
 import config from "../../config"
-import _ from "lodash";
+import _ from "lodash"
 
 /**
  * Model description here for TypeScript hints.
  */
-
 
 export const FeaturedMediaModel = types.model("media").props({
   id: types.identifier,
@@ -18,7 +17,7 @@ export const FeaturedMediaModel = types.model("media").props({
   source_url: types.maybeNull(types.string),
 })
 export const RenderModel = types.model("render").props({
-  rendered: types.string
+  rendered: types.string,
 })
 export const PostModel = types
   .model("Post")
@@ -34,23 +33,23 @@ export const PostModel = types
   })
   .views(self => ({
     get titleCase() {
-      return titleCase(_.get(self, "title.rendered"));
+      return titleCase(_.get(self, "title.rendered"))
     },
     get formattedDate() {
-      return self.date ? moment(self.date).format(config.dateFormat) : null;
+      return self.date ? moment(self.date).format(config.dateFormat) : null
     },
     get imageUrl() {
       if (self.featured_media.length) {
-        const media = self.featured_media.find(m => !!m.source_url);
-        return media.medium || media.thumbnail || media.source_url;
+        const media = self.featured_media.find(m => !!m.source_url)
+        return media.medium || media.thumbnail || media.source_url
       }
-      return null;
-    }
+      return null
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .views(self => ({
     get formattedTitle() {
-      return (config.titleCase ? self.titleCase : self.title.rendered).trim();
-    }
+      return (config.titleCase ? self.titleCase : self.title.rendered).trim()
+    },
   }))
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
@@ -63,6 +62,6 @@ export const PostModel = types
 */
 
 type PostType = Instance<typeof PostModel>
-export interface Post extends PostType { }
+export interface Post extends PostType {}
 type PostSnapshotType = SnapshotOut<typeof PostModel>
-export interface PostSnapshot extends PostSnapshotType { }
+export interface PostSnapshot extends PostSnapshotType {}

@@ -1,18 +1,16 @@
 import React, { FunctionComponent as Component, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, Image, View, ViewStyle, Dimensions, StyleSheet, Share, Text } from "react-native"
-import HTML from 'react-native-render-html';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import HTML from "react-native-render-html"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { useNavigation } from "@react-navigation/native"
-import { Card, Subheading, Paragraph, Surface, FAB } from 'react-native-paper';
-import {
-  AdMobBanner
-} from 'react-native-admob'
+import { Card, Subheading, Paragraph, Surface, FAB } from "react-native-paper"
+import { AdMobBanner } from "react-native-admob"
 import AppJson from "../../../app"
 import { Screen, BaseLayout } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
-import config from "../../config";
+import config from "../../config"
 import * as Utils from "../../utils"
 
 const ROOT: ViewStyle = {
@@ -22,9 +20,9 @@ const ROOT: ViewStyle = {
 type PostScreenProps = {
   route: {
     key: string
-    name: string,
+    name: string
     params: {
-      postId: string,
+      postId: string
       screenCatId?: string
     }
   }
@@ -32,11 +30,11 @@ type PostScreenProps = {
 
 const styles = StyleSheet.create({
   fab: {
-    position: 'absolute',
+    position: "absolute",
     marginRight: 16,
     marginBottom: -26,
     right: 0,
-    bottom: 0
+    bottom: 0,
   },
 })
 
@@ -48,34 +46,42 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
 
   // Pull in navigation via hook
   const navigation = useNavigation()
-  const goBack = () => navigation.goBack();
-  const { route } = props;
-  const { postId, screenCatId } = route.params;
+  const goBack = () => navigation.goBack()
+  const { route } = props
+  const { postId, screenCatId } = route.params
   if (!postId) {
-    goBack();
+    goBack()
   }
   // if screenCatId, route coming from category scren else home screen
-  const ps = screenCatId ? categoryPostStore.getPostStore(screenCatId) : postStore;
-  const post = ps.find(postId);
+  const ps = screenCatId ? categoryPostStore.getPostStore(screenCatId) : postStore
+  const post = ps.find(postId)
 
   useEffect(() => {
     // Display ads at 1 by 3 interval
-    if (config.ads && (1 === Utils.randomIntFromInterval(1, 3))) {
+    if (config.ads && 1 === Utils.randomIntFromInterval(1, 3)) {
       Utils.adMobInterstitial()
     }
   }, [])
 
   if (!post)
-    return <BaseLayout headerProps={{
-      headerText: "Post"
-    }} screenProps={{ preset: "scroll" }} >
-      <Text >Go Back</Text>
-    </BaseLayout>
-  const windowWidth = Dimensions.get('window').width;
+    return (
+      <BaseLayout
+        headerProps={{
+          headerText: "Post",
+        }}
+        screenProps={{ preset: "scroll" }}
+      >
+        <Text>Go Back</Text>
+      </BaseLayout>
+    )
+  const windowWidth = Dimensions.get("window").width
   return (
-    <BaseLayout headerProps={{
-      headerText: post.formattedTitle
-    }} screenProps={{ preset: "scroll" }}>
+    <BaseLayout
+      headerProps={{
+        headerText: post.formattedTitle,
+      }}
+      screenProps={{ preset: "scroll" }}
+    >
       <View>
         <FAB
           style={styles.fab}
@@ -84,12 +90,12 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
         />
         <Image
           source={{
-            uri: post.imageUrl
+            uri: post.imageUrl,
           }}
           // resizeMode="contain"
           style={{
             height: 200,
-            width: windowWidth
+            width: windowWidth,
           }}
         />
       </View>
@@ -102,14 +108,14 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
           </Paragraph>
         </Card.Content>
       </Card>
-      {
-        config.ads && <AdMobBanner
+      {config.ads && (
+        <AdMobBanner
           adSize="mediumRectangle"
           adUnitID={config.adUnitID.banner}
           testDevices={[AdMobBanner.simulatorId]}
           onAdFailedToLoad={error => console.error(error)}
         />
-      }
+      )}
       <View>
         <HTML
           html={post.content.rendered}
@@ -117,12 +123,12 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
           staticContentMaxWidth={windowWidth}
           alterChildren={node => {
             if (node.name === "iframe" || node.name === "img") {
-              delete node.attribs.width;
-              delete node.attribs.height;
+              delete node.attribs.width
+              delete node.attribs.height
             }
-            return node.children;
+            return node.children
           }}
-          onLinkPress={(evt, href) => (href)}
+          onLinkPress={(evt, href) => href}
           listsPrefixesRenderers={{
             ul: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
               return <View style={{ padding: 0, margin: 0 }} />
@@ -133,26 +139,25 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
           }}
         />
       </View>
-      {
-        config.ads && <AdMobBanner
+      {config.ads && (
+        <AdMobBanner
           adSize="fullBanner"
           adUnitID={config.adUnitID.banner}
           testDevices={[AdMobBanner.simulatorId]}
           onAdFailedToLoad={error => console.error(error)}
         />
-      }
-    </BaseLayout >
+      )}
+    </BaseLayout>
   )
 })
-
 
 const onShare = async (message?: string, url?: string) => {
   try {
     const result = await Share.share({
       message,
       url,
-      title: "Shared via " + AppJson.name
-    });
+      title: "Shared via " + AppJson.name,
+    })
     if (result.action === Share.sharedAction) {
       if (result.activityType) {
         // shared with activity type of result.activityType
@@ -163,6 +168,6 @@ const onShare = async (message?: string, url?: string) => {
       // dismissed
     }
   } catch (error) {
-    Alert.alert(error.message);
+    Alert.alert(error.message)
   }
-};
+}

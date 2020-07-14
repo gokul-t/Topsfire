@@ -8,15 +8,19 @@ export interface User {
 
 export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
-export type GetCategoryResult = {
-  kind: "ok"
-  categories: CategorySnapshot[]
-  total: number
-  totalPages: number
-} | GeneralApiProblem
-export type GetPostsResult = {
-  kind: "ok"
-  posts: PostSnapshot[]
-  total: number
-  totalPages: number
-} | GeneralApiProblem
+export type GetCategoryResult =
+  | {
+      kind: "ok"
+      categories: CategorySnapshot[]
+      total: number
+      totalPages: number
+    }
+  | GeneralApiProblem
+export type GetPostsResult =
+  | {
+      kind: "ok"
+      posts: PostSnapshot[]
+      total: number
+      totalPages: number
+    }
+  | GeneralApiProblem

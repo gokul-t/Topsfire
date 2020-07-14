@@ -5,7 +5,7 @@ const BOLD: TextStyle = { fontWeight: "bold" }
 
 export const baseLayoutStyles = {
   FULL: {
-    flex: 1
+    flex: 1,
   } as ViewStyle,
   CONTAINER: {
     backgroundColor: color.transparent,
@@ -25,6 +25,6 @@ export const baseLayoutStyles = {
     letterSpacing: 1.5,
   } as TextStyle,
   SafeAreaView: {
-    marginBottom: 60
-  } as ViewStyle
+    marginBottom: 60,
+  } as ViewStyle,
 }

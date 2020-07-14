@@ -13,46 +13,52 @@ const ROOT: ViewStyle = {
 type CategoryPostsScreenProps = {
   route: {
     key: string
-    name: string,
+    name: string
     params: {
       categoryId: string
     }
   }
 }
-export const CategoryPostsScreen: Component<CategoryPostsScreenProps> = observer(function CategoryPostsScreen(props) {
-  // Pull in one of our MST stores
-  const { categoryStore, categoryPostStore } = useStores()
-  // OR
-  // const rootStore = useStores()
+export const CategoryPostsScreen: Component<CategoryPostsScreenProps> = observer(
+  function CategoryPostsScreen(props) {
+    // Pull in one of our MST stores
+    const { categoryStore, categoryPostStore } = useStores()
+    // OR
+    // const rootStore = useStores()
 
-  // Pull in navigation via hook
-  const navigation = useNavigation()
-  const { route } = props;
-  const { categoryId } = route.params;
-  const category = categoryStore.find(categoryId);
-  const goBack = () => navigation.goBack();
-  let content = null;
-  if (!category) {
-    goBack()
-  }
-  if (categoryId) {
-    const postStore = categoryPostStore.getPostStore(categoryId);
-    const { posts = [], getPosts, loadMorePosts, nextPage } = postStore;
-    content = <PostList
-      {...{
-        posts,
-        getPosts,
-        loadMorePosts,
-        nextPage,
-        categoryId
-      }}
-    />
-  }
-  return (
-    <BaseLayout headerProps={{
-      headerText: category ? category.name : "",
-    }} >
-      {content}
-    </BaseLayout >
-  )
-})
+    // Pull in navigation via hook
+    const navigation = useNavigation()
+    const { route } = props
+    const { categoryId } = route.params
+    const category = categoryStore.find(categoryId)
+    const goBack = () => navigation.goBack()
+    let content = null
+    if (!category) {
+      goBack()
+    }
+    if (categoryId) {
+      const postStore = categoryPostStore.getPostStore(categoryId)
+      const { posts = [], getPosts, loadMorePosts, nextPage } = postStore
+      content = (
+        <PostList
+          {...{
+            posts,
+            getPosts,
+            loadMorePosts,
+            nextPage,
+            categoryId,
+          }}
+        />
+      )
+    }
+    return (
+      <BaseLayout
+        headerProps={{
+          headerText: category ? category.name : "",
+        }}
+      >
+        {content}
+      </BaseLayout>
+    )
+  },
+)

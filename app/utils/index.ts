@@ -1,10 +1,5 @@
-import {
-  AdMobBanner,
-  AdMobInterstitial,
-  PublisherBanner,
-  AdMobRewarded,
-} from 'react-native-admob'
-import config from "../config";
+import { AdMobBanner, AdMobInterstitial, PublisherBanner, AdMobRewarded } from "react-native-admob"
+import config from "../config"
 
 // import _ from "lodash";
 
@@ -22,33 +17,32 @@ import config from "../config";
 //     });
 //   });
 // }
-export function randomIntFromInterval(min, max) { // min and max included 
-  return Math.floor(Math.random() * (max - min + 1) + min);
+export function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }
 // Display an interstitial
 export function adMobInterstitial() {
-  if (!config.ads)
-    return;
-  AdMobInterstitial.setAdUnitID(config.adUnitID.interstitial);
-  AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-  return AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
+  if (!config.ads) return
+  AdMobInterstitial.setAdUnitID(config.adUnitID.interstitial)
+  AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId])
+  return AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd())
 }
 
 // Display a rewarded ad
 export function adMobRewarded() {
-  if (!config.ads)
-    return;
-  AdMobRewarded.setAdUnitID(config.adUnitID.rewardedVideo);
-  return AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
+  if (!config.ads) return
+  AdMobRewarded.setAdUnitID(config.adUnitID.rewardedVideo)
+  return AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd())
 }
 
 export function titleCase(string = "") {
   try {
-    let sentence = string.toLowerCase().split(" ");
+    let sentence = string.toLowerCase().split(" ")
     for (var i = 0; i < sentence.length; i++) {
-      sentence[i] = sentence[i][0].toUpperCase() + sentence[i].slice(1);
+      sentence[i] = sentence[i][0].toUpperCase() + sentence[i].slice(1)
     }
-    return sentence.join(" ");
+    return sentence.join(" ")
   } catch (e) {
     return string
   }

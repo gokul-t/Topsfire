@@ -5,10 +5,17 @@
  * You'll likely spend most of your time in this file.
  */
 import React from "react"
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator } from "@react-navigation/drawer"
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
-import { WelcomeScreen, DemoScreen, HomeScreen, CategoriesScreen, CategoryPostsScreen, PostScreen } from "../screens"
-import { DrawerContent } from "../components";
+import {
+  WelcomeScreen,
+  DemoScreen,
+  HomeScreen,
+  CategoriesScreen,
+  CategoryPostsScreen,
+  PostScreen,
+} from "../screens"
+import { DrawerContent } from "../components"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -29,41 +36,49 @@ const CategroryStack = createNativeStackNavigator<CategroryStackParamList>()
 const HomeStack = createNativeStackNavigator<HomeStackParamList>()
 
 export type CategroryStackParamList = {
-  categories: undefined,
-  categoryPosts: undefined,
+  categories: undefined
+  categoryPosts: undefined
   post: undefined
 }
 
 export function CategroryStackNavigator() {
-  return <CategroryStack.Navigator screenOptions={{
-    headerShown: false,
-    gestureEnabled: true,
-  }}
-    initialRouteName="categories">
-    <CategroryStack.Screen name="categories" component={CategoriesScreen} />
-    <CategroryStack.Screen name="categoryPosts" component={CategoryPostsScreen} />
-    <CategroryStack.Screen name="post" component={PostScreen} />
-  </CategroryStack.Navigator>
+  return (
+    <CategroryStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: true,
+      }}
+      initialRouteName="categories"
+    >
+      <CategroryStack.Screen name="categories" component={CategoriesScreen} />
+      <CategroryStack.Screen name="categoryPosts" component={CategoryPostsScreen} />
+      <CategroryStack.Screen name="post" component={PostScreen} />
+    </CategroryStack.Navigator>
+  )
 }
 export type HomeStackParamList = {
-  home: undefined,
+  home: undefined
   post: undefined
 }
 
 export function HomeStackNavigator() {
-  return <HomeStack.Navigator screenOptions={{
-    headerShown: false,
-    gestureEnabled: true,
-  }}
-    initialRouteName="home">
-    <HomeStack.Screen name="home" component={HomeScreen} />
-    <HomeStack.Screen name="post" component={PostScreen} />
-  </HomeStack.Navigator>
+  return (
+    <HomeStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: true,
+      }}
+      initialRouteName="home"
+    >
+      <HomeStack.Screen name="home" component={HomeScreen} />
+      <HomeStack.Screen name="post" component={PostScreen} />
+    </HomeStack.Navigator>
+  )
 }
 
 export type PrimaryParamList = {
   home: undefined
-  categories: undefined,
+  categories: undefined
   // welcome: undefined,
   // demo: undefined
 }
@@ -76,7 +91,8 @@ export function PrimaryNavigator() {
         // headerShown: false,
         gestureEnabled: true,
       }}
-      initialRouteName="home">
+      initialRouteName="home"
+    >
       <Drawer.Screen name="home" component={HomeStackNavigator} />
       <Drawer.Screen name="categories" component={CategroryStackNavigator} />
       {/* <Drawer.Screen name="welcome" component={WelcomeScreen} /> */}

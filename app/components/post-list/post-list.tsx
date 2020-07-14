@@ -1,24 +1,22 @@
 import React, { FunctionComponent as Component, useCallback, useEffect, useState } from "react"
 import { View, Text, FlatList, FlatListProps } from "react-native"
-import {
-  AdMobBanner
-} from 'react-native-admob'
-import config from "../../config";
+import { AdMobBanner } from "react-native-admob"
+import config from "../../config"
 import { PostCard } from "../"
 import { observer, useObserver } from "mobx-react-lite"
 // import { useStores, PostStore, PostStoreSnapshot } from "../../models"
 import { postListStyles as styles } from "./post-list.styles"
 
 export interface PostListProps {
-  posts: any,
-  getPosts: any,
-  loadMorePosts: any,
-  nextPage: boolean,
+  posts: any
+  getPosts: any
+  loadMorePosts: any
+  nextPage: boolean
   categoryId?: string
 }
 
 /**
- * This is a React functional component, ready to 
+ * This is a React functional component, ready to
  *
  * Component description here for TypeScript tips.
  */
@@ -31,9 +29,9 @@ export const PostList: Component<PostListProps> = props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
-  const { posts = [], getPosts, loadMorePosts, nextPage, categoryId } = props;
+  const { posts = [], getPosts, loadMorePosts, nextPage, categoryId } = props
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const fetchPost = useCallback(async () => {
     if (!loading) {
@@ -41,7 +39,7 @@ export const PostList: Component<PostListProps> = props => {
       try {
         await getPosts({ categoryId })
       } catch (error) {
-        __DEV__ && console.tron.log(error);
+        __DEV__ && console.tron.log(error)
       }
       setLoading(false)
     }
@@ -51,19 +49,22 @@ export const PostList: Component<PostListProps> = props => {
     if (!loading && nextPage) {
       setLoading(true)
       try {
-        await loadMorePosts({ categoryId });
+        await loadMorePosts({ categoryId })
       } catch (error) {
-        __DEV__ && console.tron.log(error);
+        __DEV__ && console.tron.log(error)
       }
       setLoading(false)
     }
-  }, [loading, nextPage]);
+  }, [loading, nextPage])
 
   useEffect(() => {
     fetchPost()
   }, [])
 
-  const renderItem = useCallback((renderItemProps) => <PostCard screenCatId={categoryId} {...renderItemProps}></PostCard>, [])
+  const renderItem = useCallback(
+    renderItemProps => <PostCard screenCatId={categoryId} {...renderItemProps}></PostCard>,
+    [],
+  )
 
   return useObserver(() => (
     <FlatList
@@ -82,10 +83,12 @@ export const PostList: Component<PostListProps> = props => {
 }
 
 function ItemSeparatorComponent(props) {
-  return <AdMobBanner
-    adSize="fullBanner"
-    adUnitID={config.adUnitID.banner}
-    testDevices={[AdMobBanner.simulatorId]}
-    onAdFailedToLoad={error => console.error(error)}
-  />
+  return (
+    <AdMobBanner
+      adSize="fullBanner"
+      adUnitID={config.adUnitID.banner}
+      testDevices={[AdMobBanner.simulatorId]}
+      onAdFailedToLoad={error => console.error(error)}
+    />
+  )
 }

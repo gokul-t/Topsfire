@@ -16,15 +16,15 @@ export const CategoryModel = types
     link: types.string,
     slug: types.string,
     taxonomy: types.string,
-    parent: types.number
+    parent: types.number,
   })
   .views(self => ({
     get formattedName() {
-      return config.titleCase ? titleCase(self.name) : self.name;
+      return config.titleCase ? titleCase(self.name) : self.name
     },
     get formattedDescription() {
-      return config.titleCase && self.description ? titleCase(self.description) : self.description;
-    }
+      return config.titleCase && self.description ? titleCase(self.description) : self.description
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
@@ -37,6 +37,6 @@ export const CategoryModel = types
 */
 
 type CategoryType = Instance<typeof CategoryModel>
-export interface Category extends CategoryType { }
+export interface Category extends CategoryType {}
 type CategorySnapshotType = SnapshotOut<typeof CategoryModel>
-export interface CategorySnapshot extends CategorySnapshotType { }
+export interface CategorySnapshot extends CategorySnapshotType {}

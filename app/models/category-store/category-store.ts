@@ -11,56 +11,56 @@ export const CategoryStoreModel = types
     total: types.optional(types.number, 0),
     totalPages: types.optional(types.number, 0),
     currentPage: types.optional(types.number, 0),
-    categories: types.optional(types.array(CategoryModel), [])
+    categories: types.optional(types.array(CategoryModel), []),
   })
   .extend(withEnvironment)
   .views(self => ({
     get nextPage() {
-      return self.currentPage !== self.totalPages;
-    }
+      return self.currentPage !== self.totalPages
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     find: (categoryId: string) => {
-      const category = self.categories.find(c => c.id === categoryId);
-      return category;
+      const category = self.categories.find(c => c.id === categoryId)
+      return category
     },
     saveCategories: (categorySnapShots: CategoryStoreSnapshot[], total, totalPages) => {
       const categoryModels: Category[] = categorySnapShots.map(c => CategoryModel.create(c))
-      self.currentPage = 1;
-      self.total = total;
-      self.totalPages = totalPages;
+      self.currentPage = 1
+      self.total = total
+      self.totalPages = totalPages
       self.categories.replace(categoryModels)
     },
     mergeCategories: (categorySnapShots: CategoryStoreSnapshot[], total, totalPages) => {
       const categoryModels: Category[] = categorySnapShots.map(c => CategoryModel.create(c))
-      self.currentPage = self.currentPage + 1;
-      self.total = total;
-      self.totalPages = totalPages;
+      self.currentPage = self.currentPage + 1
+      self.total = total
+      self.totalPages = totalPages
       categoryModels.map(categoryModel => self.categories.push(categoryModel))
-    }
+    },
   }))
   .actions(self => ({
-    getCategories: flow(function* () {
-      __DEV__ && console.tron.log("re fetching categories");
+    getCategories: flow(function*() {
+      __DEV__ && console.tron.log("re fetching categories")
       try {
         const result = yield self.environment.api.getCategories(1)
         if (result.kind === "ok") {
           self.saveCategories(result.categories, result.total, result.totalPages)
         } else {
-          __DEV__ && console.tron.log(result.kind);
+          __DEV__ && console.tron.log(result.kind)
         }
       } catch (error) {
-        __DEV__ && console.tron.log(error);
+        __DEV__ && console.tron.log(error)
       }
     }),
-    loadMoreCategories: flow(function* () {
+    loadMoreCategories: flow(function*() {
       const result: any = yield self.environment.api.getCategories(self.currentPage + 1)
       if (result.kind === "ok") {
         self.mergeCategories(result.categories, result.total, result.totalPages)
       } else {
-        __DEV__ && console.tron.log(result.kind);
+        __DEV__ && console.tron.log(result.kind)
       }
-    })
+    }),
   }))
 /**
 * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -71,6 +71,6 @@ export const CategoryStoreModel = types
 */
 
 type CategoryStoreType = Instance<typeof CategoryStoreModel>
-export interface CategoryStore extends CategoryStoreType { }
+export interface CategoryStore extends CategoryStoreType {}
 type CategoryStoreSnapshotType = SnapshotOut<typeof CategoryStoreModel>
-export interface CategoryStoreSnapshot extends CategoryStoreSnapshotType { }
+export interface CategoryStoreSnapshot extends CategoryStoreSnapshotType {}

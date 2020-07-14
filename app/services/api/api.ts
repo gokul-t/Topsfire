@@ -1,11 +1,11 @@
 import { ApisauceInstance, create, ApiResponse } from "apisauce"
-import WPAPI, { WPRequest } from "wpapi";
+import WPAPI, { WPRequest } from "wpapi"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
 import * as Models from "../../models"
 import * as Utils from "../../utils"
-import _ from "lodash";
+import _ from "lodash"
 /**
  * Manages all requests to the API.
  */
@@ -49,12 +49,12 @@ export class Api {
         Accept: "application/json",
       },
     })
-    this.wp = new WPAPI({ endpoint: this.config.url });
+    this.wp = new WPAPI({ endpoint: this.config.url })
   }
 
   /**
- * Gets a list of users.
- */
+   * Gets a list of users.
+   */
   async getCategories(page = 1): Promise<Types.GetCategoryResult> {
     // make the api call
     // transform the data into the format we are expecting
@@ -67,68 +67,76 @@ export class Api {
         link: raw.link,
         slug: raw.slug,
         taxonomy: raw.taxonomy,
-        parent: raw.parent
+        parent: raw.parent,
       }
     }
     try {
       // wp-json/wp/v2/categories?hide_empty=true&per_page=15
-      const response: WPRequest = await this.wp.categories().param("hide_empty", "true").page(page).perPage(15);
-      const rawCategories = response;
+      const response: WPRequest = await this.wp
+        .categories()
+        .param("hide_empty", "true")
+        .page(page)
+        .perPage(15)
+      const rawCategories = response
       const resultCategories: Models.CategorySnapshot[] = rawCategories.map(convertCategory)
       return {
         kind: "ok",
         categories: resultCategories,
         total: response._paging.total,
-        totalPages: response._paging.totalPages
+        totalPages: response._paging.totalPages,
       }
     } catch (err) {
-      __DEV__ && console.tron.log("getCategories", err);
+      __DEV__ && console.tron.log("getCategories", err)
       return { kind: "bad-data" }
     }
   }
   async getPosts({ categoryId, page }): Promise<Types.GetPostsResult> {
-
     const convertFeaturedMedia = (m, i) => {
-      return ({
+      return {
         id: String(m.id),
         medium: _.get(m, "media_details.sizes.medium.source_url"),
         large: _.get(m, "media_details.sizes.large.source_url"),
         thumbnail: _.get(m, "media_details.sizes.thumbnail.source_url"),
-        source_url: _.get(m, "source_url")
-      })
+        source_url: _.get(m, "source_url"),
+      }
     }
 
     const convertPost = raw => {
-      const featured_media = raw.featured_media ? raw._embedded["wp:featuredmedia"] : [];
+      const featured_media = raw.featured_media ? raw._embedded["wp:featuredmedia"] : []
       return {
         id: String(raw.id),
         date: raw.date,
         title: raw.title,
         content: raw.content,
         status: raw.status,
-        featured_media: Array.isArray(featured_media) ? featured_media.map(convertFeaturedMedia) : [],
+        featured_media: Array.isArray(featured_media)
+          ? featured_media.map(convertFeaturedMedia)
+          : [],
         categories: raw.categories,
-        link: raw.link
+        link: raw.link,
       }
     }
 
     try {
-      const request = categoryId ? this.wp.posts().category(categoryId) : this.wp.posts();
-      const response: WPRequest = await request.embed().order('desc').orderby('date').page(page)
-      const rawPosts = response;
+      const request = categoryId ? this.wp.posts().category(categoryId) : this.wp.posts()
+      const response: WPRequest = await request
+        .embed()
+        .order("desc")
+        .orderby("date")
+        .page(page)
+      const rawPosts = response
       const resultPosts: Models.PostSnapshot[] = rawPosts.map(convertPost)
       return {
         kind: "ok",
         posts: resultPosts,
         total: response._paging.total,
-        totalPages: response._paging.totalPages
+        totalPages: response._paging.totalPages,
       }
     } catch (err) {
-      __DEV__ && console.tron.log("getPosts", err);
+      __DEV__ && console.tron.log("getPosts", err)
       return { kind: "bad-data" }
     }
   }
-
 
   /**
    * Gets a list of users.
