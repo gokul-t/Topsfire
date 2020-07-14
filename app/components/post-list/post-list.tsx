@@ -1,6 +1,10 @@
 import React, { FunctionComponent as Component, useCallback, useEffect, useState } from "react"
-import { View, FlatList, FlatListProps } from "react-native"
-import { Text, PostCard } from "../"
+import { View, Text, FlatList, FlatListProps } from "react-native"
+import {
+  AdMobBanner
+} from 'react-native-admob'
+import config from "../../config";
+import { PostCard } from "../"
 import { observer, useObserver } from "mobx-react-lite"
 // import { useStores, PostStore, PostStoreSnapshot } from "../../models"
 import { postListStyles as styles } from "./post-list.styles"
@@ -68,10 +72,20 @@ export const PostList: Component<PostListProps> = props => {
       onRefresh={fetchPost}
       onEndReached={handleLoadMore}
       onEndReachedThreshold={10}
+      ItemSeparatorComponent={config.ads ? ItemSeparatorComponent : null}
       // ListFooterComponent={renderFooter}
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
       extraData={posts}
     />
   ))
+}
+
+function ItemSeparatorComponent(props) {
+  return <AdMobBanner
+    adSize="fullBanner"
+    adUnitID={config.adUnitID.banner}
+    testDevices={[AdMobBanner.simulatorId]}
+    onAdFailedToLoad={error => console.error(error)}
+  />
 }
