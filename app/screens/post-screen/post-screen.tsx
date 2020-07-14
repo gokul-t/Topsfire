@@ -1,15 +1,19 @@
-import React, { FunctionComponent as Component } from "react"
+import React, { FunctionComponent as Component, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, Image, View, ViewStyle, Dimensions, StyleSheet, Share, Text } from "react-native"
 import HTML from 'react-native-render-html';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from "@react-navigation/native"
 import { Card, Subheading, Paragraph, Surface, FAB } from 'react-native-paper';
-
+import {
+  AdMobBanner
+} from 'react-native-admob'
 import AppJson from "../../../app"
 import { Screen, BaseLayout } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
+import config from "../../config";
+import * as Utils from "../../utils"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
@@ -54,6 +58,13 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
   const ps = screenCatId ? categoryPostStore.getPostStore(screenCatId) : postStore;
   const post = ps.find(postId);
 
+  useEffect(() => {
+    // Display ads at 1 by 3 interval
+    if (config.ads && (1 === Utils.randomIntFromInterval(1, 3))) {
+      Utils.adMobInterstitial()
+    }
+  }, [])
+
   if (!post)
     return <BaseLayout headerProps={{
       headerText: "Post"
@@ -91,6 +102,14 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
           </Paragraph>
         </Card.Content>
       </Card>
+      {
+        config.ads && <AdMobBanner
+          adSize="mediumRectangle"
+          adUnitID={config.adUnitID.banner}
+          testDevices={[AdMobBanner.simulatorId]}
+          onAdFailedToLoad={error => console.error(error)}
+        />
+      }
       <View>
         <HTML
           html={post.content.rendered}
@@ -114,6 +133,14 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
           }}
         />
       </View>
+      {
+        config.ads && <AdMobBanner
+          adSize="fullBanner"
+          adUnitID={config.adUnitID.banner}
+          testDevices={[AdMobBanner.simulatorId]}
+          onAdFailedToLoad={error => console.error(error)}
+        />
+      }
     </BaseLayout >
   )
 })
