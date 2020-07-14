@@ -123,19 +123,25 @@ export function DrawerContent(props: Props) {
           />
         </Drawer.Section>
         <Drawer.Section title="Other">
-          <TouchableRipple onPress={() => { }}>
+          <TouchableRipple onPress={() => props.navigation.navigate("aboutUs")}>
             <View style={styles.preference}>
-              <Text>About US</Text>
+              <Text>
+                <MaterialCommunityIcons name="information" />{"   "}About US
+              </Text>
+            </View>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => props.navigation.navigate("contactUs")}>
+            <View style={styles.preference}>
+              <Text>
+                <MaterialCommunityIcons name="phone" />{"   "}Contact Us
+              </Text>
             </View>
           </TouchableRipple>
           <TouchableRipple onPress={() => { }}>
             <View style={styles.preference}>
-              <Text>Contact Us</Text>
-            </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => { }}>
-            <View style={styles.preference}>
-              <Text>Share App</Text>
+              <Text>
+                <MaterialCommunityIcons name="share" />{"   "}Share App
+              </Text>
             </View>
           </TouchableRipple>
         </Drawer.Section>
@@ -145,7 +151,7 @@ export function DrawerContent(props: Props) {
               (<TouchableRipple onPress={() => handleClick(followUsItem.url)}>
                 <View style={styles.preference}>
                   <Text>
-                    <MaterialCommunityIcons name={followUsItem.icon} />{" "}{followUsItem.name}
+                    <MaterialCommunityIcons name={followUsItem.icon} />{"   "}{followUsItem.name}
                   </Text>
                 </View>
               </TouchableRipple>))

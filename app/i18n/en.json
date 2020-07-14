@@ -26,6 +26,12 @@
   "categoriesScreen": {
     "header": "Categories"
   },
+  "contactUsScreen": {
+    "header": "Contact Us"
+  },
+  "aboutUsScreen": {
+    "header": "About Us"
+  },
   "storybook": {
     "placeholder": "Placeholder",
     "field": "Field"

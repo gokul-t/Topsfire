@@ -14,6 +14,8 @@ import {
   CategoriesScreen,
   CategoryPostsScreen,
   PostScreen,
+  ContactUsScreen,
+  AboutUsScreen
 } from "../screens"
 import { DrawerContent } from "../components"
 
@@ -78,7 +80,9 @@ export function HomeStackNavigator() {
 
 export type PrimaryParamList = {
   home: undefined
-  categories: undefined
+  categories: undefined,
+  contactUs: undefined
+  aboutUs: undefined
   // welcome: undefined,
   // demo: undefined
 }
@@ -95,6 +99,8 @@ export function PrimaryNavigator() {
     >
       <Drawer.Screen name="home" component={HomeStackNavigator} />
       <Drawer.Screen name="categories" component={CategroryStackNavigator} />
+      <Drawer.Screen name="contactUs" component={ContactUsScreen} />
+      <Drawer.Screen name="aboutUs" component={AboutUsScreen} />
       {/* <Drawer.Screen name="welcome" component={WelcomeScreen} /> */}
       {/* <Drawer.Screen name="demo" component={DemoScreen} /> */}
     </Drawer.Navigator>

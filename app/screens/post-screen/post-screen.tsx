@@ -30,11 +30,10 @@ type PostScreenProps = {
 
 const styles = StyleSheet.create({
   fab: {
+    zIndex: 100,
     position: "absolute",
-    marginRight: 16,
-    marginBottom: -26,
-    right: 0,
-    bottom: 0,
+    right: 16,
+    bottom: -25,
   },
 })
 
@@ -49,9 +48,7 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
   const goBack = () => navigation.goBack()
   const { route } = props
   const { postId, screenCatId } = route.params
-  if (!postId) {
-    goBack()
-  }
+
   // if screenCatId, route coming from category scren else home screen
   const ps = screenCatId ? categoryPostStore.getPostStore(screenCatId) : postStore
   const post = ps.find(postId)
@@ -62,6 +59,10 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
       Utils.adMobInterstitial()
     }
   }, [])
+
+  if (!postId || !post) {
+    goBack()
+  }
 
   if (!post)
     return (
@@ -154,7 +155,7 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
 const onShare = async (message?: string, url?: string) => {
   try {
     const result = await Share.share({
-      message,
+      message: message + "\n" + url,
       url,
       title: "Shared via " + AppJson.name,
     })
@@ -165,7 +166,7 @@ const onShare = async (message?: string, url?: string) => {
         // shared
       }
     } else if (result.action === Share.dismissedAction) {
-      // dismissed
+      __DEV__ && console.tron.log(result)
     }
   } catch (error) {
     Alert.alert(error.message)
