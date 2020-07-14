@@ -83,12 +83,20 @@ export const PostList: Component<PostListProps> = props => {
 }
 
 function ItemSeparatorComponent(props) {
-  return (
-    <AdMobBanner
-      adSize="fullBanner"
-      adUnitID={config.adUnitID.banner}
-      testDevices={[AdMobBanner.simulatorId]}
-      onAdFailedToLoad={error => console.error(error)}
-    />
-  )
+  const flag = (Number(props.leadingItem.id) % 5 === 0);
+  if (!flag)
+    return (
+      <AdMobBanner
+        adSize="fullBanner"
+        adUnitID={config.adUnitID.banner}
+        testDevices={[AdMobBanner.simulatorId]}
+        onAdFailedToLoad={error => console.error(error)}
+      />
+    )
+  return <AdMobBanner
+    adSize="mediumRectangle"
+    adUnitID={config.adUnitID.banner}
+    testDevices={[AdMobBanner.simulatorId]}
+    onAdFailedToLoad={error => console.error(error)}
+  />
 }

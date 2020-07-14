@@ -57,8 +57,8 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
   const post = ps.find(postId)
 
   useEffect(() => {
-    // Display ads at 1 by 3 interval
-    if (config.ads && 1 === Utils.randomIntFromInterval(1, 3)) {
+    // Display ads at 1 by 10 interval
+    if (config.ads && 3 === Utils.randomIntFromInterval(1, 10)) {
       Utils.adMobInterstitial()
     }
   }, [])
