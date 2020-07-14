@@ -1,13 +1,13 @@
-import React, { FunctionComponent as Component, useEffect } from "react"
+import React, { FunctionComponent as Component, useEffect, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, Image, View, ViewStyle, Dimensions, StyleSheet, Share, Text } from "react-native"
 import HTML from "react-native-render-html"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { useNavigation } from "@react-navigation/native"
-import { Card, Subheading, Paragraph, Surface, FAB } from "react-native-paper"
+import { Card, Subheading, Paragraph, Surface, FAB, Title } from "react-native-paper"
 import { AdMobBanner } from "react-native-admob"
 import AppJson from "../../../app"
-import { Screen, BaseLayout } from "../../components"
+import { Screen, BaseLayout, CategoryPostList } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 import config from "../../config"
@@ -59,6 +59,10 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
       Utils.adMobInterstitial()
     }
   }, [])
+
+  const excludePost = useCallback((p) => {
+    return p.id !== postId
+  }, [postId]);
 
   if (!postId || !post) {
     goBack()
@@ -148,6 +152,8 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
           onAdFailedToLoad={error => console.error(error)}
         />
       )}
+      <Title> Related Posts </Title>
+      {post.categories.map(catId => <CategoryPostList categoryId={catId} horizontal={true} filter={excludePost} ></CategoryPostList>)}
     </BaseLayout>
   )
 })

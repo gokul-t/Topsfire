@@ -1,5 +1,6 @@
-import { ViewStyle, TextStyle } from "react-native"
+import { Dimensions, ViewStyle, TextStyle } from "react-native"
 import { color, typography } from "../../theme"
+const windowWidth = Dimensions.get("window").width
 
 export const postCardStyles = {
   WRAPPER: {
@@ -15,6 +16,12 @@ export const postCardStyles = {
     flex: 1,
     flexDirection: "row",
     backgroundColor: color.palette.white,
+    maxWidth: windowWidth * .9
+  } as ViewStyle,
+  CARD2: {
+    margin: 15,
+    backgroundColor: color.palette.white,
+    maxWidth: windowWidth * .9
   } as ViewStyle,
   CardContent: {
     paddingHorizontal: 10,

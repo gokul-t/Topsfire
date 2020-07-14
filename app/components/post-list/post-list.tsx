@@ -12,7 +12,9 @@ export interface PostListProps {
   getPosts: any
   loadMorePosts: any
   nextPage: boolean
-  categoryId?: string
+  categoryId?: string,
+  horizontal?: boolean,
+  filter: Function
 }
 
 /**
@@ -29,7 +31,7 @@ export const PostList: Component<PostListProps> = props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
-  const { posts = [], getPosts, loadMorePosts, nextPage, categoryId } = props
+  const { posts = [], getPosts, loadMorePosts, nextPage, categoryId, horizontal = false, filter } = props
 
   const [loading, setLoading] = useState(false)
 
@@ -62,29 +64,31 @@ export const PostList: Component<PostListProps> = props => {
   }, [])
 
   const renderItem = useCallback(
-    renderItemProps => <PostCard key={renderItemProps.item.id} screenCatId={categoryId} {...renderItemProps}></PostCard>,
+    renderItemProps => <PostCard key={renderItemProps.item.id}
+      cardType={horizontal ? 2 : 1}
+      screenCatId={categoryId} {...renderItemProps}>
+    </PostCard>,
     [],
   )
-
+  const ItemSeparatorComponent = horizontal ? ItemSeparatorComponent1 : ItemSeparatorComponent1;
   return useObserver(() => (
     <FlatList
-      data={posts}
+      data={filter ? posts.filter(filter) : posts}
       refreshing={loading}
       onRefresh={fetchPost}
       onEndReached={handleLoadMore}
       onEndReachedThreshold={10}
-      ItemSeparatorComponent={config.ads ? ItemSeparatorComponent : null}
+      ItemSeparatorComponent={!horizontal && config.ads ? ItemSeparatorComponent : null}
       // ListFooterComponent={renderFooter}
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
       extraData={posts}
+      horizontal={horizontal}
     />
   ))
 }
 
-function ItemSeparatorComponent(props) {
-  // const flag = (Number(props.leadingItem.id) % 5 === 0);
-  // if (!flag)
+function ItemSeparatorComponent1(props) {
   return (
     <AdMobBanner
       adSize="fullBanner"
@@ -93,10 +97,13 @@ function ItemSeparatorComponent(props) {
       onAdFailedToLoad={error => console.error(error)}
     />
   )
-  // return <AdMobBanner
-  //   adSize="mediumRectangle"
-  //   adUnitID={config.adUnitID.banner}
-  //   testDevices={[AdMobBanner.simulatorId]}
-  //   onAdFailedToLoad={error => console.error(error)}
-  // />
+}
+
+function ItemSeparatorComponent2(props) {
+  return <AdMobBanner
+    adSize="mediumRectangle"
+    adUnitID={config.adUnitID.banner}
+    testDevices={[AdMobBanner.simulatorId]}
+    onAdFailedToLoad={error => console.error(error)}
+  />
 }

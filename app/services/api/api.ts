@@ -112,7 +112,8 @@ export class Api {
         featured_media: Array.isArray(featured_media)
           ? featured_media.map(convertFeaturedMedia)
           : [],
-        categories: raw.categories,
+        categories: raw.categories.map(c => String(c)),
+        catModels: raw.categories.map(c => String(c)),
         link: raw.link,
       }
     }

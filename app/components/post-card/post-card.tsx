@@ -1,4 +1,4 @@
-import React, { FunctionComponent as Component } from "react"
+import React, { FunctionComponent as Component, useCallback } from "react"
 import { View, Text, TouchableOpacity, Image } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { Avatar, Button, Card, Subheading, Paragraph } from "react-native-paper"
@@ -11,7 +11,8 @@ import { postCardStyles as styles } from "./post-card.styles"
 
 export interface PostCardProps {
   item: Post
-  screenCatId: string
+  screenCatId: string,
+  cardType?: number
 }
 
 /**
@@ -29,7 +30,7 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
-  const { item, screenCatId } = props
+  const { item, screenCatId, cardType = 1 } = props
   const goPostScreen = () =>
     navigation.navigate("post", {
       postId: item.id,
@@ -48,16 +49,42 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
 
   return useObserver(() => (
     <TouchableOpacity onPress={goPostScreen}>
-      <Card style={styles.CARD} elevation={12}>
-        <Card.Cover source={{ uri: item.imageUrl }} />
-        <Card.Content style={styles.CardContent}>
-          <Subheading>{item.formattedTitle}</Subheading>
+      {cardType === 1 ? <CardType1 item={item} /> : <CardType2 item={item} />}
+    </TouchableOpacity>
+  ))
+})
+
+
+function CardType1({ item }) {
+  return <Card style={styles.CARD} elevation={12}>
+    <Card.Cover source={{ uri: item.imageUrl }} />
+    <Card.Content style={styles.CardContent}>
+      <Subheading>{item.formattedTitle}</Subheading>
+      <Paragraph>
+        <MaterialCommunityIcons name="clock" />
+        {` ${item.formattedDate}`}
+      </Paragraph>
+    </Card.Content>
+  </Card>
+}
+
+function CardType2({ item }) {
+  return (
+    <Card style={styles.CARD2} elevation={12}>
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        <Image source={{ uri: item.imageUrl }} style={{
+          height: 100,
+          width: 100,
+          borderRadius: 5
+        }} />
+        <Card.Content>
+          <Subheading numberOfLines={3}>{item.formattedTitle}</Subheading>
           <Paragraph>
             <MaterialCommunityIcons name="clock" />
             {` ${item.formattedDate}`}
           </Paragraph>
         </Card.Content>
-      </Card>
-    </TouchableOpacity>
-  ))
-})
+      </View>
+    </Card>
+  );
+}

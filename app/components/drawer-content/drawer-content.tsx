@@ -54,7 +54,8 @@ export function DrawerContent(props: Props) {
       style={[
         props.style,
         {
-          backgroundColor: paperTheme.colors.primary,
+          marginTop: -5,
+          // backgroundColor: paperTheme.colors.primary,
         },
       ]}
     >
