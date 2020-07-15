@@ -12,10 +12,12 @@ type HomeScreenParams = {
   navigation: any
 }
 
-export const HomeScreen: Component<HomeScreenParams> = observer(function HomeScreen({ navigation: drawerNavigation }) {
+export const HomeScreen: Component<HomeScreenParams> = observer(function HomeScreen({
+  navigation: drawerNavigation,
+}) {
   // Pull in one of our MST stores
   const { postStore } = useStores()
-  const { posts = [], getPosts, loadMorePosts, nextPage } = postStore;
+  const { posts = [], getPosts, loadMorePosts, nextPage } = postStore
   // OR
   // const rootStore = useStores()
 
@@ -23,19 +25,21 @@ export const HomeScreen: Component<HomeScreenParams> = observer(function HomeScr
   // const navigation = useNavigation()
 
   return (
-    <BaseLayout headerProps={{
-      headerText: config.displayName,
-      leftIcon: "menu",
-      onLeftPress: () => drawerNavigation.toggleDrawer()
-    }} >
+    <BaseLayout
+      headerProps={{
+        headerText: config.displayName,
+        leftIcon: "menu",
+        onLeftPress: () => drawerNavigation.toggleDrawer(),
+      }}
+    >
       <PostList
         {...{
           posts,
           getPosts,
           loadMorePosts,
-          nextPage
+          nextPage,
         }}
       />
-    </BaseLayout >
+    </BaseLayout>
   )
 })

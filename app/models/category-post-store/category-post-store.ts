@@ -7,18 +7,17 @@ import { PostStoreModel, PostStore } from "../post-store/post-store"
 export const CategoryPostStoreModel = types
   .model("CategoryPostStore")
   .props({
-    categoryPostStores: types.optional(types.map(PostStoreModel), {})
+    categoryPostStores: types.optional(types.map(PostStoreModel), {}),
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     getPostStore: (categoryId: string): PostStore => {
-      const finded: PostStore = self.categoryPostStores.get(categoryId);
-      if (finded)
-        return finded;
-      const postStore: PostStore = PostStoreModel.create();
+      const finded: PostStore = self.categoryPostStores.get(categoryId)
+      if (finded) return finded
+      const postStore: PostStore = PostStoreModel.create()
       self.categoryPostStores.set(categoryId, postStore)
-      return postStore;
-    }
+      return postStore
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
@@ -30,6 +29,6 @@ export const CategoryPostStoreModel = types
 */
 
 type CategoryPostStoreType = Instance<typeof CategoryPostStoreModel>
-export interface CategoryPostStore extends CategoryPostStoreType { }
+export interface CategoryPostStore extends CategoryPostStoreType {}
 type CategoryPostStoreSnapshotType = SnapshotOut<typeof CategoryPostStoreModel>
-export interface CategoryPostStoreSnapshot extends CategoryPostStoreSnapshotType { }
+export interface CategoryPostStoreSnapshot extends CategoryPostStoreSnapshotType {}

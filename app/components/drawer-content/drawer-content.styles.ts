@@ -11,7 +11,7 @@ export const drawerContentStyles = StyleSheet.create({
   title: {
     color: color.palette.white,
     marginTop: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   caption: {
     color: color.palette.white,
@@ -20,25 +20,25 @@ export const drawerContentStyles = StyleSheet.create({
   },
   row: {
     marginTop: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   section: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginRight: 15,
   },
   paragraph: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginRight: 3,
   },
   drawerSection: {
     marginTop: 15,
   },
   preference: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
-});
+})

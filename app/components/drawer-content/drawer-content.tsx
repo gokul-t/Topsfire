@@ -1,12 +1,12 @@
-import React from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useCallback } from "react"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import {
   DrawerContentComponentProps,
   DrawerContentOptions,
   DrawerContentScrollView,
   DrawerItem,
-} from '@react-navigation/drawer';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+} from "@react-navigation/drawer"
+import { Image, Linking, StyleSheet, TouchableOpacity, View } from "react-native"
 import { drawerContentStyles as styles } from "./drawer-content.styles"
 import { useNavigation } from "@react-navigation/native"
 
@@ -20,16 +20,15 @@ import {
   Title,
   TouchableRipple,
   useTheme,
-} from 'react-native-paper';
-import Animated from 'react-native-reanimated';
+} from "react-native-paper"
+import Animated from "react-native-reanimated"
 import config from "../../config"
 // import { PreferencesContext } from './context/preferencesContext';
 
-type Props = DrawerContentComponentProps<DrawerNavigationProp>;
+type Props = DrawerContentComponentProps<DrawerNavigationProp>
 
 export function DrawerContent(props: Props) {
-
-  const paperTheme = useTheme();
+  const paperTheme = useTheme()
   //   const { rtl, theme, toggleRTL, toggleTheme } = React.useContext(
   //     PreferencesContext
   //   );
@@ -37,13 +36,29 @@ export function DrawerContent(props: Props) {
   const translateX = Animated.interpolate(props.progress, {
     inputRange: [0, 0.5, 0.7, 0.8, 1],
     outputRange: [-100, -85, -70, -45, 0],
-  });
+  })
 
+  const handleClick = useCallback(url => {
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url)
+      } else {
+        __DEV__ && console.tron.log("Don't know how to open URI: " + url)
+      }
+    })
+  }, [])
 
   return (
-    <DrawerContentScrollView {...props} style={[props.style, {
-      backgroundColor: paperTheme.colors.primary,
-    }]}>
+    <DrawerContentScrollView
+      {...props}
+      style={[
+        props.style,
+        {
+          marginTop: -5,
+          // backgroundColor: paperTheme.colors.primary,
+        },
+      ]}
+    >
       <Animated.View
         //@ts-ignore
         style={[
@@ -54,13 +69,18 @@ export function DrawerContent(props: Props) {
           },
         ]}
       >
-        <View style={[styles.userInfoSection, {
-          backgroundColor: paperTheme.colors.primary,
-        }]}>
+        <View
+          style={[
+            styles.userInfoSection,
+            {
+              backgroundColor: paperTheme.colors.primary,
+            },
+          ]}
+        >
           <TouchableOpacity
             style={{ marginLeft: 10 }}
             onPress={() => {
-              props.navigation.toggleDrawer();
+              props.navigation.toggleDrawer()
             }}
           >
             <Image
@@ -69,7 +89,7 @@ export function DrawerContent(props: Props) {
               }}
               style={{
                 width: 75,
-                height: 75
+                height: 75,
               }}
             />
           </TouchableOpacity>
@@ -79,80 +99,78 @@ export function DrawerContent(props: Props) {
         <Drawer.Section style={styles.drawerSection}>
           <DrawerItem
             icon={({ color, size }) => (
-              <MaterialCommunityIcons
-                name="home"
-                color={color}
-                size={size}
-              />
+              <MaterialCommunityIcons name="home" color={color} size={size} />
             )}
             label="Home"
             onPress={() => props.navigation.navigate("home")}
           />
           <DrawerItem
             icon={({ color, size }) => (
-              <MaterialCommunityIcons name="format-list-bulleted-square" color={color} size={size} />
+              <MaterialCommunityIcons
+                name="format-list-bulleted-square"
+                color={color}
+                size={size}
+              />
             )}
             label="Categories"
             onPress={() => props.navigation.navigate("categories")}
           />
           <DrawerItem
             icon={({ color, size }) => (
-              <MaterialCommunityIcons
-                name="bookmark-outline"
-                color={color}
-                size={size}
-              />
+              <MaterialCommunityIcons name="bookmark-outline" color={color} size={size} />
             )}
             label="Bookmarks"
-            onPress={() => { }}
+            onPress={() => {}}
           />
         </Drawer.Section>
         <Drawer.Section title="Other">
-          <TouchableRipple onPress={() => { }}>
+          <TouchableRipple onPress={() => props.navigation.navigate("aboutUs")}>
             <View style={styles.preference}>
-              <Text>About US</Text>
+              <Text>
+                <MaterialCommunityIcons name="information" />
+                {"   "}About US
+              </Text>
             </View>
           </TouchableRipple>
-          <TouchableRipple onPress={() => { }}>
+          <TouchableRipple onPress={() => props.navigation.navigate("contactUs")}>
             <View style={styles.preference}>
-              <Text>Contact Us</Text>
+              <Text>
+                <MaterialCommunityIcons name="phone" />
+                {"   "}Contact Us
+              </Text>
             </View>
           </TouchableRipple>
-          <TouchableRipple onPress={() => { }}>
+          <TouchableRipple onPress={() => {}}>
             <View style={styles.preference}>
-              <Text>Share App</Text>
+              <Text>
+                <MaterialCommunityIcons name="share" />
+                {"   "}Share App
+              </Text>
             </View>
           </TouchableRipple>
         </Drawer.Section>
         <Drawer.Section title="Follow Us">
-          <TouchableRipple onPress={() => { }}>
-            <View style={styles.preference}>
-              <Text><MaterialCommunityIcons
-                name="facebook"
-              />  Facebook</Text>
-            </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => { }}>
-            <View style={styles.preference}>
-              <Text><MaterialCommunityIcons
-                name="youtube"
-              />  Youtube</Text>
-            </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => { }}>
-            <View style={styles.preference}>
-              <Text><MaterialCommunityIcons
-                name="twitter"
-              />  Twitter</Text>
-            </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => { }}>
-            <View style={styles.preference}>
-              <Text><MaterialCommunityIcons
-                name="search-web"
-              />  Website</Text>
-            </View>
-          </TouchableRipple>
+          {config.followUs
+            .filter(f => f.url)
+            .map(followUsItem => (
+              <TouchableRipple
+                key={followUsItem.icon}
+                onPress={() => handleClick(followUsItem.url)}
+              >
+                <View style={styles.preference}>
+                  <Text>
+                    <MaterialCommunityIcons name={followUsItem.icon} />
+                    {"   "}
+                    {followUsItem.name}
+                  </Text>
+                </View>
+              </TouchableRipple>
+            ))}
+          {config.followUs
+            .filter(f => !f.url)
+            .map(followUsItem => (
+              <View key={followUsItem.icon} style={styles.preference} />
+            ))}
         </Drawer.Section>
         {/* <Drawer.Section title="Preferences">
           <TouchableRipple onPress={toggleTheme}>
@@ -174,5 +192,5 @@ export function DrawerContent(props: Props) {
         </Drawer.Section> */}
       </Animated.View>
     </DrawerContentScrollView>
-  );
+  )
 }

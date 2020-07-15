@@ -1,7 +1,7 @@
 import { ViewStyle, TextStyle } from "react-native"
 import { color, typography } from "../../theme"
 
-export const postListStyles = {
+export const categoryPostListStyles = {
   WRAPPER: {
     justifyContent: "center",
   } as ViewStyle,
