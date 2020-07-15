@@ -201,7 +201,7 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
         showRelatedPosts && <>
           <Title> Related Posts </Title>
           {post.categoryModels.map(categoryModel => (
-            <Surface>
+            <Surface key={categoryModel.id}>
               <Caption style={{ marginLeft: 5 }}>{categoryModel.name}</Caption>
               <CategoryPostList
                 key={categoryModel.id}
