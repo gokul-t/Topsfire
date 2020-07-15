@@ -2,7 +2,16 @@ import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
 import { Screen, Text, BaseLayout } from "../components"
-import { Avatar, Button, Card, Subheading, Paragraph, Title, Caption, TouchableRipple } from "react-native-paper"
+import {
+  Avatar,
+  Button,
+  Card,
+  Subheading,
+  Paragraph,
+  Title,
+  Caption,
+  TouchableRipple,
+} from "react-native-paper"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -22,7 +31,7 @@ const CARD: ViewStyle = {
   flex: 1,
   flexDirection: "row",
   backgroundColor: color.palette.white,
-};
+}
 const CardContent: ViewStyle = {
   paddingHorizontal: 10,
   marginHorizontal: 5,
@@ -51,7 +60,11 @@ export const AboutUsScreen: Component<AboutUsScreenParams> = observer(function A
         <Card.Content style={CardContent}>
           <Title>{AppJson.name}</Title>
           <Caption>{AppJson.tagLine}</Caption>
-          <Paragraph>We are promoting Self Un-employed Women’s to create their business by making craft items.we provide all steps to create craft work model example we are providing images,YouTube videos etc</Paragraph>
+          <Paragraph>
+            We are promoting Self Un-employed Women’s to create their business by making craft
+            items.we provide all steps to create craft work model example we are providing
+            images,YouTube videos etc
+          </Paragraph>
         </Card.Content>
       </Card>
     </BaseLayout>

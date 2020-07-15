@@ -3,11 +3,11 @@ import { color, typography } from "../../theme"
 
 export const categoryPostListStyles = {
   WRAPPER: {
-    justifyContent: 'center',
+    justifyContent: "center",
   } as ViewStyle,
   TEXT: {
     fontFamily: typography.primary,
     fontSize: 14,
-    color: color.primary
-  } as TextStyle
+    color: color.primary,
+  } as TextStyle,
 }

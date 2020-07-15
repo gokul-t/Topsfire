@@ -41,7 +41,7 @@ export const PostStoreModel = types
     },
   }))
   .actions(self => ({
-    getPosts: flow(function* ({ categoryId }: { categoryId?: string }) {
+    getPosts: flow(function*({ categoryId }: { categoryId?: string }) {
       const page = 1
       const result: any = yield self.environment.api.getPosts({ categoryId, page })
       if (result.kind === "ok") {
@@ -50,7 +50,7 @@ export const PostStoreModel = types
         __DEV__ && console.tron.log(result.kind)
       }
     }),
-    loadMorePosts: flow(function* ({ categoryId }: { categoryId?: string }) {
+    loadMorePosts: flow(function*({ categoryId }: { categoryId?: string }) {
       const result: any = yield self.environment.api.getPosts({
         categoryId,
         page: self.currentPage + 1,
@@ -72,6 +72,6 @@ export const PostStoreModel = types
 */
 
 type PostStoreType = Instance<typeof PostStoreModel>
-export interface PostStore extends PostStoreType { }
+export interface PostStore extends PostStoreType {}
 type PostStoreSnapshotType = SnapshotOut<typeof PostStoreModel>
-export interface PostStoreSnapshot extends PostStoreSnapshotType { }
+export interface PostStoreSnapshot extends PostStoreSnapshotType {}

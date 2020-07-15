@@ -11,8 +11,8 @@ export interface PostListProps {
   getPosts: any
   loadMorePosts: any
   nextPage: boolean
-  categoryId?: string,
-  horizontal?: boolean,
+  categoryId?: string
+  horizontal?: boolean
   filter: Function
 }
 
@@ -30,7 +30,15 @@ export const PostList: Component<PostListProps> = props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
-  const { posts = [], getPosts, loadMorePosts, nextPage, categoryId, horizontal = false, filter } = props
+  const {
+    posts = [],
+    getPosts,
+    loadMorePosts,
+    nextPage,
+    categoryId,
+    horizontal = false,
+    filter,
+  } = props
 
   const [loading, setLoading] = useState(false)
 
@@ -63,17 +71,29 @@ export const PostList: Component<PostListProps> = props => {
   }, [])
 
   const renderItem = useCallback(
-    (renderItemProps) => <PostCard key={renderItemProps.item.id}
-      cardType={horizontal ? 2 : 1}
-      screenCatId={categoryId} {...renderItemProps}>
-    </PostCard>,
-    []
+    renderItemProps => (
+      <PostCard
+        key={renderItemProps.item.id}
+        cardType={horizontal ? 2 : 1}
+        screenCatId={categoryId}
+        {...renderItemProps}
+      ></PostCard>
+    ),
+    [],
   )
 
-  const ItemSeparatorComponent = useCallback((props) =>
-    props.highlighted && <PostCardAdsType key={"seperator-" + props.leadingItem.index} cardType={horizontal ? 2 : 1} />, [])
+  const ItemSeparatorComponent = useCallback(
+    props =>
+      props.highlighted && (
+        <PostCardAdsType
+          key={"seperator-" + props.leadingItem.index}
+          cardType={horizontal ? 2 : 1}
+        />
+      ),
+    [],
+  )
 
-  const data = filter ? posts.filter(filter) : posts;
+  const data = filter ? posts.filter(filter) : posts
 
   return useObserver(() => (
     <FlatList
@@ -91,6 +111,3 @@ export const PostList: Component<PostListProps> = props => {
     />
   ))
 }
-
-
-

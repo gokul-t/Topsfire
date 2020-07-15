@@ -31,7 +31,7 @@ export const PostModel = types
     link: types.string,
     featured_media: types.optional(types.array(FeaturedMediaModel), []),
     categories: types.array(types.string),
-    categoryModels: types.array(types.late(() => CategoryModel))
+    categoryModels: types.array(types.late(() => CategoryModel)),
   })
   .views(self => ({
     get titleCase() {
@@ -64,6 +64,6 @@ export const PostModel = types
 */
 
 type PostType = Instance<typeof PostModel>
-export interface Post extends PostType { }
+export interface Post extends PostType {}
 type PostSnapshotType = SnapshotOut<typeof PostModel>
-export interface PostSnapshot extends PostSnapshotType { }
+export interface PostSnapshot extends PostSnapshotType {}

@@ -41,11 +41,13 @@ export const CategoryPostsScreen: Component<CategoryPostsScreenProps> = observer
           headerText: category ? category.name : "",
         }}
       >
-        {categoryId && <CategoryPostList
-          {...{
-            categoryId,
-          }}
-        />}
+        {categoryId && (
+          <CategoryPostList
+            {...{
+              categoryId,
+            }}
+          />
+        )}
       </BaseLayout>
     )
   },

@@ -13,9 +13,9 @@ import config from "../../config"
 
 export interface PostCardProps {
   item: Post
-  screenCatId: string,
-  cardType?: number,
-  separators?: any,
+  screenCatId: string
+  cardType?: number
+  separators?: any
   index?: number
 }
 
@@ -52,8 +52,7 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
   // />
 
   useEffect(() => {
-    if (separators && index && index % 5 === 0)
-      return separators.highlight()
+    if (separators && index && index % 5 === 0) return separators.highlight()
     return separators.unhighlight()
   }, [])
 
@@ -69,55 +68,70 @@ export const PostCardAdsType = React.memo((props: { cardType: number }) => {
 })
 
 function PostCardType1({ item }) {
-  return <Card style={styles.CARD} elevation={12}>
-    <Card.Cover source={{ uri: item.imageUrl }} />
-    <Card.Content style={styles.CardContent}>
-      <Subheading numberOfLines={3}>{item.formattedTitle}</Subheading>
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-        {item.categoryModels.map(c => <Badge key={c.id} style={{ marginRight: 3 }}>{c.name}</Badge>)}
-        <Paragraph style={{ marginLeft: 'auto' }}>
-          <MaterialCommunityIcons name="clock" />
-          {` ${item.formattedDate}`}
-        </Paragraph>
-      </View>
-    </Card.Content>
-  </Card>
+  return (
+    <Card style={styles.CARD} elevation={12}>
+      <Card.Cover source={{ uri: item.imageUrl }} />
+      <Card.Content style={styles.CardContent}>
+        <Subheading numberOfLines={3}>{item.formattedTitle}</Subheading>
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          {item.categoryModels.map(c => (
+            <Badge key={c.id} style={{ marginRight: 3 }}>
+              {c.name}
+            </Badge>
+          ))}
+          <Paragraph style={{ marginLeft: "auto" }}>
+            <MaterialCommunityIcons name="clock" />
+            {` ${item.formattedDate}`}
+          </Paragraph>
+        </View>
+      </Card.Content>
+    </Card>
+  )
 }
 
 export function PostCardAdsType1(props) {
-  return <Card style={styles.CARD} elevation={12}>
-    <View style={{
-      alignItems: 'center',
-      flex: 1,
-      justifyContent: 'center',
-      marginTop: 15,
-      marginBottom: 15
-    }}>
-      <View style={{
-        minHeight: 250,
-        minWidth: 300,
-        backgroundColor: "grey"
-      }}>
-        <AdMobBanner
-          adSize="mediumRectangle"
-          adUnitID={config.adUnitID.banner}
-          testDevices={[AdMobBanner.simulatorId]}
-          onAdFailedToLoad={error => console.error(error)}
-        />
+  return (
+    <Card style={styles.CARD} elevation={12}>
+      <View
+        style={{
+          alignItems: "center",
+          flex: 1,
+          justifyContent: "center",
+          marginTop: 15,
+          marginBottom: 15,
+        }}
+      >
+        <View
+          style={{
+            minHeight: 250,
+            minWidth: 300,
+            backgroundColor: "grey",
+          }}
+        >
+          <AdMobBanner
+            adSize="mediumRectangle"
+            adUnitID={config.adUnitID.banner}
+            testDevices={[AdMobBanner.simulatorId]}
+            onAdFailedToLoad={error => console.error(error)}
+          />
+        </View>
       </View>
-    </View>
-  </Card>
+    </Card>
+  )
 }
 
 function PostCardType2({ item }) {
   return (
     <Card style={styles.CARD2} elevation={12}>
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-        <Image source={{ uri: item.imageUrl }} style={{
-          height: 100,
-          width: 100,
-          borderRadius: 5
-        }} />
+      <View style={{ flex: 1, flexDirection: "row" }}>
+        <Image
+          source={{ uri: item.imageUrl }}
+          style={{
+            height: 100,
+            width: 100,
+            borderRadius: 5,
+          }}
+        />
         <Card.Content>
           <Subheading numberOfLines={3}>{item.formattedTitle}</Subheading>
           <Paragraph>
@@ -127,21 +141,25 @@ function PostCardType2({ item }) {
         </Card.Content>
       </View>
     </Card>
-  );
+  )
 }
 
 export function PostCardAdsType2() {
-  return <View style={{
-    // minHeight: 90,
-    justifyContent: 'center', //Centered vertically
-    alignItems: 'center', // Centered horizontally
-    flex: 1
-  }} >
-    <AdMobBanner
-      adSize="fullBanner"
-      adUnitID={config.adUnitID.banner}
-      testDevices={[AdMobBanner.simulatorId]}
-      onAdFailedToLoad={error => console.error(error)}
-    />
-  </View>
+  return (
+    <View
+      style={{
+        // minHeight: 90,
+        justifyContent: "center", //Centered vertically
+        alignItems: "center", // Centered horizontally
+        flex: 1,
+      }}
+    >
+      <AdMobBanner
+        adSize="fullBanner"
+        adUnitID={config.adUnitID.banner}
+        testDevices={[AdMobBanner.simulatorId]}
+        onAdFailedToLoad={error => console.error(error)}
+      />
+    </View>
+  )
 }

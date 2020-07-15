@@ -37,6 +37,6 @@ export const CategoryModel = types
 */
 
 type CategoryType = Instance<typeof CategoryModel>
-export interface Category extends CategoryType { }
+export interface Category extends CategoryType {}
 type CategorySnapshotType = SnapshotOut<typeof CategoryModel>
-export interface CategorySnapshot extends CategorySnapshotType { }
+export interface CategorySnapshot extends CategorySnapshotType {}

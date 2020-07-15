@@ -4,7 +4,16 @@ import { Text, View, ViewStyle, Linking } from "react-native"
 import { Screen, BaseLayout } from "../components"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
-import { Avatar, Button, Card, Subheading, Paragraph, Title, Caption, TouchableRipple } from "react-native-paper"
+import {
+  Avatar,
+  Button,
+  Card,
+  Subheading,
+  Paragraph,
+  Title,
+  Caption,
+  TouchableRipple,
+} from "react-native-paper"
 import AppJson from "../../app"
 import config from "../config"
 
@@ -25,7 +34,7 @@ const CARD: ViewStyle = {
   flex: 1,
   flexDirection: "row",
   backgroundColor: color.palette.white,
-};
+}
 const CardContent: ViewStyle = {
   paddingHorizontal: 10,
   marginHorizontal: 5,
@@ -41,15 +50,15 @@ export const ContactUsScreen: Component<ContactUsScreenParams> = observer(functi
 
   // Pull in navigation via hook
   // const navigation = useNavigation()
-  const handleClick = useCallback((url) => {
+  const handleClick = useCallback(url => {
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
-        Linking.openURL(url);
+        Linking.openURL(url)
       } else {
-        __DEV__ && console.tron.log("Don't know how to open URI: " + url);
+        __DEV__ && console.tron.log("Don't know how to open URI: " + url)
       }
-    });
-  }, []);
+    })
+  }, [])
   return (
     <BaseLayout
       headerProps={{
@@ -70,21 +79,29 @@ export const ContactUsScreen: Component<ContactUsScreenParams> = observer(functi
       <Card style={CARD} elevation={12}>
         <Card.Content style={CardContent}>
           <Subheading>Follow Us</Subheading>
-          {
-            config.followUs.filter(f => f.url).map(followUsItem =>
-              (<TouchableRipple key={followUsItem.icon} onPress={() => handleClick(followUsItem.url)}>
-                <View style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  paddingVertical: 12,
-                  paddingHorizontal: 16,
-                }}>
+          {config.followUs
+            .filter(f => f.url)
+            .map(followUsItem => (
+              <TouchableRipple
+                key={followUsItem.icon}
+                onPress={() => handleClick(followUsItem.url)}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingVertical: 12,
+                    paddingHorizontal: 16,
+                  }}
+                >
                   <Paragraph>
-                    <MaterialCommunityIcons name={followUsItem.icon} />{"   "}{followUsItem.name}
+                    <MaterialCommunityIcons name={followUsItem.icon} />
+                    {"   "}
+                    {followUsItem.name}
                   </Paragraph>
                 </View>
-              </TouchableRipple>))
-          }
+              </TouchableRipple>
+            ))}
         </Card.Content>
       </Card>
     </BaseLayout>

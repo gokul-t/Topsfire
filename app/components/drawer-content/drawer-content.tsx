@@ -38,15 +38,15 @@ export function DrawerContent(props: Props) {
     outputRange: [-100, -85, -70, -45, 0],
   })
 
-  const handleClick = useCallback((url) => {
+  const handleClick = useCallback(url => {
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
-        Linking.openURL(url);
+        Linking.openURL(url)
       } else {
-        __DEV__ && console.tron.log("Don't know how to open URI: " + url);
+        __DEV__ && console.tron.log("Don't know how to open URI: " + url)
       }
-    });
-  }, []);
+    })
+  }, [])
 
   return (
     <DrawerContentScrollView
@@ -120,46 +120,57 @@ export function DrawerContent(props: Props) {
               <MaterialCommunityIcons name="bookmark-outline" color={color} size={size} />
             )}
             label="Bookmarks"
-            onPress={() => { }}
+            onPress={() => {}}
           />
         </Drawer.Section>
         <Drawer.Section title="Other">
           <TouchableRipple onPress={() => props.navigation.navigate("aboutUs")}>
             <View style={styles.preference}>
               <Text>
-                <MaterialCommunityIcons name="information" />{"   "}About US
+                <MaterialCommunityIcons name="information" />
+                {"   "}About US
               </Text>
             </View>
           </TouchableRipple>
           <TouchableRipple onPress={() => props.navigation.navigate("contactUs")}>
             <View style={styles.preference}>
               <Text>
-                <MaterialCommunityIcons name="phone" />{"   "}Contact Us
+                <MaterialCommunityIcons name="phone" />
+                {"   "}Contact Us
               </Text>
             </View>
           </TouchableRipple>
-          <TouchableRipple onPress={() => { }}>
+          <TouchableRipple onPress={() => {}}>
             <View style={styles.preference}>
               <Text>
-                <MaterialCommunityIcons name="share" />{"   "}Share App
+                <MaterialCommunityIcons name="share" />
+                {"   "}Share App
               </Text>
             </View>
           </TouchableRipple>
         </Drawer.Section>
         <Drawer.Section title="Follow Us">
-          {
-            config.followUs.filter(f => f.url).map(followUsItem =>
-              (<TouchableRipple key={followUsItem.icon} onPress={() => handleClick(followUsItem.url)}>
+          {config.followUs
+            .filter(f => f.url)
+            .map(followUsItem => (
+              <TouchableRipple
+                key={followUsItem.icon}
+                onPress={() => handleClick(followUsItem.url)}
+              >
                 <View style={styles.preference}>
                   <Text>
-                    <MaterialCommunityIcons name={followUsItem.icon} />{"   "}{followUsItem.name}
+                    <MaterialCommunityIcons name={followUsItem.icon} />
+                    {"   "}
+                    {followUsItem.name}
                   </Text>
                 </View>
-              </TouchableRipple>))
-          }
-          {
-            config.followUs.filter(f => !f.url).map((followUsItem) => <View key={followUsItem.icon} style={styles.preference} />)
-          }
+              </TouchableRipple>
+            ))}
+          {config.followUs
+            .filter(f => !f.url)
+            .map(followUsItem => (
+              <View key={followUsItem.icon} style={styles.preference} />
+            ))}
         </Drawer.Section>
         {/* <Drawer.Section title="Preferences">
           <TouchableRipple onPress={toggleTheme}>

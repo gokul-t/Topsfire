@@ -6,13 +6,13 @@ import { useStores } from "../../models"
 import { categoryPostListStyles as styles } from "./category-post-list.styles"
 
 export interface CategoryPostListProps {
-  categoryId: string,
-  horizontal?: boolean,
+  categoryId: string
+  horizontal?: boolean
   filter?: Function
 }
 
 /**
- * This is a React functional component, ready to 
+ * This is a React functional component, ready to
  *
  * Component description here for TypeScript tips.
  */
@@ -24,7 +24,7 @@ export const CategoryPostList: Component<CategoryPostListProps> = props => {
   // Enable this line to retrieve data from the rootStore (or other store)
   // const rootStore = useStores()
   // or
-  const { categoryId, horizontal, filter } = props;
+  const { categoryId, horizontal, filter } = props
   const { categoryPostStore } = useStores()
 
   const postStore = categoryPostStore.getPostStore(categoryId)
@@ -39,7 +39,7 @@ export const CategoryPostList: Component<CategoryPostListProps> = props => {
         nextPage,
         categoryId,
         horizontal,
-        filter
+        filter,
       }}
     />
   ))

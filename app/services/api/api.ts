@@ -102,8 +102,8 @@ export class Api {
 
     const convertPost = raw => {
       const featured_media = raw.featured_media ? raw._embedded["wp:featuredmedia"] : []
-      const term = (raw._embedded["wp:term"] || []);
-      const categoryModels = term[0].map(this.convertCategory);
+      const term = raw._embedded["wp:term"] || []
+      const categoryModels = term[0].map(this.convertCategory)
       return {
         id: String(raw.id),
         date: raw.date,
@@ -115,7 +115,7 @@ export class Api {
           : [],
         categories: raw.categories.map(c => String(c)),
         link: raw.link,
-        categoryModels
+        categoryModels,
       }
     }
 

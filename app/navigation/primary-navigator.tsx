@@ -15,7 +15,7 @@ import {
   CategoryPostsScreen,
   PostScreen,
   ContactUsScreen,
-  AboutUsScreen
+  AboutUsScreen,
 } from "../screens"
 import { DrawerContent } from "../components"
 
@@ -80,7 +80,7 @@ export function HomeStackNavigator() {
 
 export type PrimaryParamList = {
   home: undefined
-  categories: undefined,
+  categories: undefined
   contactUs: undefined
   aboutUs: undefined
   // welcome: undefined,
