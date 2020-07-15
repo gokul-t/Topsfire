@@ -149,7 +149,7 @@ export function DrawerContent(props: Props) {
         <Drawer.Section title="Follow Us">
           {
             config.followUs.filter(f => f.url).map(followUsItem =>
-              (<TouchableRipple onPress={() => handleClick(followUsItem.url)}>
+              (<TouchableRipple key={followUsItem.icon} onPress={() => handleClick(followUsItem.url)}>
                 <View style={styles.preference}>
                   <Text>
                     <MaterialCommunityIcons name={followUsItem.icon} />{"   "}{followUsItem.name}
@@ -158,7 +158,7 @@ export function DrawerContent(props: Props) {
               </TouchableRipple>))
           }
           {
-            config.followUs.filter(f => !f.url).map(() => <View style={styles.preference} />)
+            config.followUs.filter(f => !f.url).map((followUsItem) => <View key={followUsItem.icon} style={styles.preference} />)
           }
         </Drawer.Section>
         {/* <Drawer.Section title="Preferences">

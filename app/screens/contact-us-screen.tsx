@@ -72,7 +72,7 @@ export const ContactUsScreen: Component<ContactUsScreenParams> = observer(functi
           <Subheading>Follow Us</Subheading>
           {
             config.followUs.filter(f => f.url).map(followUsItem =>
-              (<TouchableRipple onPress={() => handleClick(followUsItem.url)}>
+              (<TouchableRipple key={followUsItem.icon} onPress={() => handleClick(followUsItem.url)}>
                 <View style={{
                   flexDirection: "row",
                   justifyContent: "space-between",

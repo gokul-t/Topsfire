@@ -1,9 +1,8 @@
 import React, { FunctionComponent as Component, useCallback, useEffect, useState } from "react"
-import { View, Text, FlatList, FlatListProps } from "react-native"
-import { AdMobBanner } from "react-native-admob"
+import { FlatList } from "react-native"
 import config from "../../config"
-import { PostCard } from "../"
-import { observer, useObserver } from "mobx-react-lite"
+import { PostCard, PostCardAdsType } from "../"
+import { useObserver } from "mobx-react-lite"
 // import { useStores, PostStore, PostStoreSnapshot } from "../../models"
 import { postListStyles as styles } from "./post-list.styles"
 
@@ -64,46 +63,34 @@ export const PostList: Component<PostListProps> = props => {
   }, [])
 
   const renderItem = useCallback(
-    renderItemProps => <PostCard key={renderItemProps.item.id}
+    (renderItemProps) => <PostCard key={renderItemProps.item.id}
       cardType={horizontal ? 2 : 1}
       screenCatId={categoryId} {...renderItemProps}>
     </PostCard>,
-    [],
+    []
   )
-  const ItemSeparatorComponent = horizontal ? ItemSeparatorComponent1 : ItemSeparatorComponent1;
+
+  const ItemSeparatorComponent = useCallback((props) =>
+    props.highlighted && <PostCardAdsType key={"seperator-" + props.leadingItem.index} cardType={horizontal ? 2 : 1} />, [])
+
+  const data = filter ? posts.filter(filter) : posts;
+
   return useObserver(() => (
     <FlatList
-      data={filter ? posts.filter(filter) : posts}
+      data={data}
       refreshing={loading}
       onRefresh={fetchPost}
       onEndReached={handleLoadMore}
       onEndReachedThreshold={10}
-      ItemSeparatorComponent={!horizontal && config.ads ? ItemSeparatorComponent : null}
+      ItemSeparatorComponent={ItemSeparatorComponent}
       // ListFooterComponent={renderFooter}
       renderItem={renderItem}
-      keyExtractor={(item, index) => index.toString()}
+      keyExtractor={(item, index) => item.id.toString()}
       extraData={posts}
       horizontal={horizontal}
     />
   ))
 }
 
-function ItemSeparatorComponent1(props) {
-  return (
-    <AdMobBanner
-      adSize="fullBanner"
-      adUnitID={config.adUnitID.banner}
-      testDevices={[AdMobBanner.simulatorId]}
-      onAdFailedToLoad={error => console.error(error)}
-    />
-  )
-}
 
-function ItemSeparatorComponent2(props) {
-  return <AdMobBanner
-    adSize="mediumRectangle"
-    adUnitID={config.adUnitID.banner}
-    testDevices={[AdMobBanner.simulatorId]}
-    onAdFailedToLoad={error => console.error(error)}
-  />
-}
+

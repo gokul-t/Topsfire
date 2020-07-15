@@ -4,7 +4,7 @@ import { Alert, Image, View, ViewStyle, Dimensions, StyleSheet, Share, Text } fr
 import HTML from "react-native-render-html"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { useNavigation } from "@react-navigation/native"
-import { Card, Subheading, Paragraph, Surface, FAB, Title } from "react-native-paper"
+import { Badge, Card, Caption, Subheading, Paragraph, Surface, FAB, Title } from "react-native-paper"
 import { AdMobBanner } from "react-native-admob"
 import AppJson from "../../../app"
 import { Screen, BaseLayout, CategoryPostList } from "../../components"
@@ -107,19 +107,36 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
       <Card>
         <Card.Content>
           <Subheading>{post.formattedTitle}</Subheading>
-          <Paragraph>
-            <MaterialCommunityIcons name="clock" />
-            {` ${post.formattedDate}`}
-          </Paragraph>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            {post.categoryModels.map(c => <Badge key={c.id} style={{ marginRight: 3 }}>{c.name}</Badge>)}
+            <Paragraph style={{ marginLeft: 'auto' }}>
+              <MaterialCommunityIcons name="clock" />
+              {` ${post.formattedDate}`}
+            </Paragraph>
+          </View>
         </Card.Content>
       </Card>
       {config.ads && (
-        <AdMobBanner
-          adSize="mediumRectangle"
-          adUnitID={config.adUnitID.banner}
-          testDevices={[AdMobBanner.simulatorId]}
-          onAdFailedToLoad={error => console.error(error)}
-        />
+        <View style={{
+          alignItems: 'center',
+          flex: 1,
+          justifyContent: 'center',
+          marginTop: 15,
+          marginBottom: 15
+        }}>
+          <View style={{
+            minHeight: 250,
+            minWidth: 300,
+            backgroundColor: "grey"
+          }}>
+            <AdMobBanner
+              adSize="mediumRectangle"
+              adUnitID={config.adUnitID.banner}
+              testDevices={[AdMobBanner.simulatorId]}
+              onAdFailedToLoad={error => console.error(error)}
+            />
+          </View>
+        </View>
       )}
       <View>
         <HTML
@@ -144,16 +161,18 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
           }}
         />
       </View>
-      {config.ads && (
-        <AdMobBanner
-          adSize="fullBanner"
-          adUnitID={config.adUnitID.banner}
-          testDevices={[AdMobBanner.simulatorId]}
-          onAdFailedToLoad={error => console.error(error)}
-        />
-      )}
+      {config.ads && (<AdMobBanner
+        adSize="fullBanner"
+        adUnitID={config.adUnitID.banner}
+        testDevices={[AdMobBanner.simulatorId]}
+        onAdFailedToLoad={error => console.error(error)}
+      />)}
       <Title> Related Posts </Title>
-      {post.categories.map(categoryId => <CategoryPostList categoryId={categoryId} horizontal={true} filter={excludePost} ></CategoryPostList>)}
+      {post.categoryModels.map(categoryModel => <Surface>
+        <Caption style={{ marginLeft: 5 }}>{categoryModel.name}</Caption>
+        <CategoryPostList key={categoryModel.id} categoryId={categoryModel.id} horizontal={true} filter={excludePost} ></CategoryPostList>
+      </Surface>)
+      }
     </BaseLayout>
   )
 })

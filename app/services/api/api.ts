@@ -51,25 +51,24 @@ export class Api {
     })
     this.wp = new WPAPI({ endpoint: this.config.url })
   }
-
+  convertCategory = raw => {
+    return {
+      id: String(raw.id),
+      name: raw.name,
+      count: raw.count,
+      description: raw.description,
+      link: raw.link,
+      slug: raw.slug,
+      taxonomy: raw.taxonomy,
+      parent: raw.parent,
+    }
+  }
   /**
    * Gets a list of users.
    */
   async getCategories(page = 1): Promise<Types.GetCategoryResult> {
     // make the api call
     // transform the data into the format we are expecting
-    const convertCategory = raw => {
-      return {
-        id: String(raw.id),
-        name: raw.name,
-        count: raw.count,
-        description: raw.description,
-        link: raw.link,
-        slug: raw.slug,
-        taxonomy: raw.taxonomy,
-        parent: raw.parent,
-      }
-    }
     try {
       // wp-json/wp/v2/categories?hide_empty=true&per_page=15
       const response: WPRequest = await this.wp
@@ -78,7 +77,7 @@ export class Api {
         .page(page)
         .perPage(15)
       const rawCategories = response
-      const resultCategories: Models.CategorySnapshot[] = rawCategories.map(convertCategory)
+      const resultCategories: Models.CategorySnapshot[] = rawCategories.map(this.convertCategory)
       return {
         kind: "ok",
         categories: resultCategories,
@@ -103,6 +102,8 @@ export class Api {
 
     const convertPost = raw => {
       const featured_media = raw.featured_media ? raw._embedded["wp:featuredmedia"] : []
+      const term = (raw._embedded["wp:term"] || []);
+      const categoryModels = term[0].map(this.convertCategory);
       return {
         id: String(raw.id),
         date: raw.date,
@@ -114,6 +115,7 @@ export class Api {
           : [],
         categories: raw.categories.map(c => String(c)),
         link: raw.link,
+        categoryModels
       }
     }
 

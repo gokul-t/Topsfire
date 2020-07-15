@@ -30,7 +30,8 @@ export const PostModel = types
     status: types.string,
     link: types.string,
     featured_media: types.optional(types.array(FeaturedMediaModel), []),
-    categories: types.array(types.string)
+    categories: types.array(types.string),
+    categoryModels: types.array(types.late(() => CategoryModel))
   })
   .views(self => ({
     get titleCase() {
