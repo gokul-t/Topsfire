@@ -1,4 +1,4 @@
-import React, { FunctionComponent as Component, useEffect, useCallback } from "react"
+import React, { FunctionComponent as Component, useEffect, useState, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, Image, View, ViewStyle, Dimensions, StyleSheet, Share, Text } from "react-native"
 import HTML from "react-native-render-html"
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
 export const PostScreen: Component<PostScreenProps> = observer(function PostScreen(props) {
   // Pull in one of our MST stores
   const { postStore, categoryPostStore } = useStores()
+  const [showRelatedPosts, setShowRelatedPosts] = useState(false);
   // OR
   // const rootStore = useStores()
 
@@ -68,6 +69,13 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
       Utils.adMobInterstitial()
     }
   }, [])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowRelatedPosts(true);
+    }, 6000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const excludePost = useCallback(
     p => {
@@ -189,18 +197,22 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
           onAdFailedToLoad={error => console.error(error)}
         />
       )}
-      <Title> Related Posts </Title>
-      {post.categoryModels.map(categoryModel => (
-        <Surface>
-          <Caption style={{ marginLeft: 5 }}>{categoryModel.name}</Caption>
-          <CategoryPostList
-            key={categoryModel.id}
-            categoryId={categoryModel.id}
-            horizontal={true}
-            filter={excludePost}
-          ></CategoryPostList>
-        </Surface>
-      ))}
+      {
+        showRelatedPosts && <>
+          <Title> Related Posts </Title>
+          {post.categoryModels.map(categoryModel => (
+            <Surface>
+              <Caption style={{ marginLeft: 5 }}>{categoryModel.name}</Caption>
+              <CategoryPostList
+                key={categoryModel.id}
+                categoryId={categoryModel.id}
+                horizontal={true}
+                filter={excludePost}
+              ></CategoryPostList>
+            </Surface>
+          ))}
+        </>
+      }
     </BaseLayout>
   )
 })

@@ -101,7 +101,7 @@ export const PostList: Component<PostListProps> = props => {
       refreshing={loading}
       onRefresh={fetchPost}
       onEndReached={handleLoadMore}
-      onEndReachedThreshold={10}
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ItemSeparatorComponent}
       // ListFooterComponent={renderFooter}
       renderItem={renderItem}
