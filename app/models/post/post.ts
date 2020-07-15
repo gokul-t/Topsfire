@@ -1,5 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { CategoryModel, Category } from "../category/category"
+import { CategoryStoreModel } from "../category-store/category-store"
 import moment from "moment"
 import { titleCase } from "../../utils"
 import config from "../../config"
@@ -29,8 +30,7 @@ export const PostModel = types
     status: types.string,
     link: types.string,
     featured_media: types.optional(types.array(FeaturedMediaModel), []),
-    categories: types.array(types.string),
-    catModels: types.array(types.reference(types.late(() => CategoryModel))),
+    categories: types.array(types.string)
   })
   .views(self => ({
     get titleCase() {

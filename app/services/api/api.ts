@@ -113,7 +113,6 @@ export class Api {
           ? featured_media.map(convertFeaturedMedia)
           : [],
         categories: raw.categories.map(c => String(c)),
-        catModels: raw.categories.map(c => String(c)),
         link: raw.link,
       }
     }

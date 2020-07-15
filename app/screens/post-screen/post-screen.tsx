@@ -153,7 +153,7 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
         />
       )}
       <Title> Related Posts </Title>
-      {post.categories.map(catId => <CategoryPostList categoryId={catId} horizontal={true} filter={excludePost} ></CategoryPostList>)}
+      {post.categories.map(categoryId => <CategoryPostList categoryId={categoryId} horizontal={true} filter={excludePost} ></CategoryPostList>)}
     </BaseLayout>
   )
 })
