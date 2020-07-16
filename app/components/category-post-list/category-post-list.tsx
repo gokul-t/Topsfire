@@ -8,7 +8,8 @@ import { categoryPostListStyles as styles } from "./category-post-list.styles"
 export interface CategoryPostListProps {
   categoryId: string
   horizontal?: boolean
-  filter?: Function
+  filter?: Function,
+  cardType?: number
 }
 
 /**
@@ -24,7 +25,7 @@ export const CategoryPostList: Component<CategoryPostListProps> = props => {
   // Enable this line to retrieve data from the rootStore (or other store)
   // const rootStore = useStores()
   // or
-  const { categoryId, horizontal, filter } = props
+  const { categoryId, horizontal, filter, cardType } = props
   const { categoryPostStore } = useStores()
 
   const postStore = categoryPostStore.getPostStore(categoryId)
@@ -40,6 +41,7 @@ export const CategoryPostList: Component<CategoryPostListProps> = props => {
         categoryId,
         horizontal,
         filter,
+        cardType
       }}
     />
   ))

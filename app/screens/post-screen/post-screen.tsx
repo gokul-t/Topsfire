@@ -1,6 +1,6 @@
 import React, { FunctionComponent as Component, useEffect, useState, useCallback } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, Image, View, ViewStyle, Dimensions, StyleSheet, Share, Text } from "react-native"
+import { Alert, ActivityIndicator, Image, View, ViewStyle, Dimensions, StyleSheet, FlatList, Share, Text } from "react-native"
 import HTML from "react-native-render-html"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { useNavigation } from "@react-navigation/native"
@@ -14,9 +14,8 @@ import {
   FAB,
   Title,
 } from "react-native-paper"
-import { AdMobBanner } from "react-native-admob"
 import AppJson from "../../../app"
-import { Screen, BaseLayout, CategoryPostList } from "../../components"
+import { Screen, PostCardAdsType, BaseLayout, CategoryPostList } from "../../components"
 import { useStores } from "../../models"
 import { color } from "../../theme"
 import config from "../../config"
@@ -99,120 +98,130 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
         <Text>Go Back</Text>
       </BaseLayout>
     )
-  const windowWidth = Dimensions.get("window").width
+
+  const windowWidth = Dimensions.get("window").width;
+
+  const bannerView = <View key={"bannerView"}>
+    <FAB
+      style={styles.fab}
+      icon="share"
+      onPress={() => onShare(post.formattedTitle, post.link)}
+    />
+    <Image
+      source={{
+        uri: post.imageUrl,
+      }}
+      // resizeMode="contain"
+      style={{
+        height: 200,
+        width: windowWidth,
+      }}
+    />
+  </View>;
+
+  const titleView = <Card key={"titleView"}>
+    <Card.Content>
+      <Subheading>{post.formattedTitle}</Subheading>
+      <View style={{ flex: 1, flexDirection: "row" }}>
+        {post.categoryModels.map(c => (
+          <Badge key={c.id} style={{ marginRight: 3 }}>
+            {c.name}
+          </Badge>
+        ))}
+        <Paragraph style={{ marginLeft: "auto" }}>
+          <MaterialCommunityIcons name="clock" />
+          {` ${post.formattedDate}`}
+        </Paragraph>
+      </View>
+    </Card.Content>
+  </Card>
+  const adCardView1 = (
+    <PostCardAdsType key={"adCardView1"} ></PostCardAdsType>
+  )
+  const contentView = <HTML
+    key={"contentView"}
+    html={post.content.rendered}
+    imagesMaxWidth={windowWidth}
+    staticContentMaxWidth={windowWidth}
+    alterChildren={node => {
+      if (node.name === "iframe" || node.name === "img") {
+        delete node.attribs.width
+        delete node.attribs.height
+      }
+      return node.children
+    }}
+    onLinkPress={(evt, href) => href}
+    listsPrefixesRenderers={{
+      ul: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
+        return <View style={{ padding: 0, margin: 0 }} />
+      },
+      li: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
+        return <View style={{ padding: 0, margin: 0 }} />
+      },
+    }}
+  />
+
+  const adCardView2 = <PostCardAdsType key={"adCardView2"} cardType={2}></PostCardAdsType>
+
+  const renderRelatedPost = useCallback(
+    ({ item }) => {
+      const categoryModel = item;
+      return (
+        <Surface key={categoryModel.id}>
+          <Caption style={{ marginLeft: 5 }}>{categoryModel.name}</Caption>
+          <CategoryPostList
+            key={categoryModel.id}
+            categoryId={categoryModel.id}
+            filter={excludePost}
+            cardType={2}
+          ></CategoryPostList>
+        </Surface>
+      )
+    },
+    [],
+  );
+  const relatedPostsView = <View key={"relatedPostsView"}>
+    <Title> Related Posts </Title>
+    <FlatList
+      data={post.categoryModels}
+      renderItem={renderRelatedPost}
+      keyExtractor={(item, index) => index.toString()}
+    />
+  </View>
+
+  const data = [bannerView, titleView];
+  if (config.ads) {
+    data.push(adCardView1)
+  }
+  data.push(contentView)
+  if (config.ads) {
+    data.push(adCardView2)
+  }
+  if (showRelatedPosts) {
+    data.push(relatedPostsView)
+  } else {
+    data.push(<ActivityIndicator animating={true} />)
+  }
+
+  const renderItem = useCallback(
+    renderItemProps => (
+      renderItemProps.item
+    ),
+    [],
+  );
+
   return (
     <BaseLayout
       headerProps={{
         headerText: post.formattedTitle,
       }}
-      screenProps={{ preset: "scroll" }}
+    // screenProps={{ preset: "scroll" }}
     >
-      <View>
-        <FAB
-          style={styles.fab}
-          icon="share"
-          onPress={() => onShare(post.formattedTitle, post.link)}
-        />
-        <Image
-          source={{
-            uri: post.imageUrl,
-          }}
-          // resizeMode="contain"
-          style={{
-            height: 200,
-            width: windowWidth,
-          }}
-        />
-      </View>
-      <Card>
-        <Card.Content>
-          <Subheading>{post.formattedTitle}</Subheading>
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            {post.categoryModels.map(c => (
-              <Badge key={c.id} style={{ marginRight: 3 }}>
-                {c.name}
-              </Badge>
-            ))}
-            <Paragraph style={{ marginLeft: "auto" }}>
-              <MaterialCommunityIcons name="clock" />
-              {` ${post.formattedDate}`}
-            </Paragraph>
-          </View>
-        </Card.Content>
-      </Card>
-      {config.ads && (
-        <View
-          style={{
-            alignItems: "center",
-            flex: 1,
-            justifyContent: "center",
-            marginTop: 15,
-            marginBottom: 15,
-          }}
-        >
-          <View
-            style={{
-              minHeight: 250,
-              minWidth: 300,
-              backgroundColor: "grey",
-            }}
-          >
-            <AdMobBanner
-              adSize="mediumRectangle"
-              adUnitID={config.adUnitID.banner}
-              testDevices={[AdMobBanner.simulatorId]}
-              onAdFailedToLoad={error => console.error(error)}
-            />
-          </View>
-        </View>
-      )}
-      <View>
-        <HTML
-          html={post.content.rendered}
-          imagesMaxWidth={windowWidth}
-          staticContentMaxWidth={windowWidth}
-          alterChildren={node => {
-            if (node.name === "iframe" || node.name === "img") {
-              delete node.attribs.width
-              delete node.attribs.height
-            }
-            return node.children
-          }}
-          onLinkPress={(evt, href) => href}
-          listsPrefixesRenderers={{
-            ul: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
-              return <View style={{ padding: 0, margin: 0 }} />
-            },
-            li: (_htmlAttribs, _children, _convertedCSSStyles, passProps) => {
-              return <View style={{ padding: 0, margin: 0 }} />
-            },
-          }}
-        />
-      </View>
-      {config.ads && (
-        <AdMobBanner
-          adSize="fullBanner"
-          adUnitID={config.adUnitID.banner}
-          testDevices={[AdMobBanner.simulatorId]}
-          onAdFailedToLoad={error => console.error(error)}
-        />
-      )}
-      {
-        showRelatedPosts && <>
-          <Title> Related Posts </Title>
-          {post.categoryModels.map(categoryModel => (
-            <Surface key={categoryModel.id}>
-              <Caption style={{ marginLeft: 5 }}>{categoryModel.name}</Caption>
-              <CategoryPostList
-                key={categoryModel.id}
-                categoryId={categoryModel.id}
-                horizontal={true}
-                filter={excludePost}
-              ></CategoryPostList>
-            </Surface>
-          ))}
-        </>
-      }
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </BaseLayout>
   )
 })

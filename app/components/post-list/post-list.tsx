@@ -14,6 +14,7 @@ export interface PostListProps {
   categoryId?: string
   horizontal?: boolean
   filter: Function
+  cardType?: number
 }
 
 /**
@@ -38,6 +39,7 @@ export const PostList: Component<PostListProps> = props => {
     categoryId,
     horizontal = false,
     filter,
+    cardType
   } = props
 
   const [loading, setLoading] = useState(false)
@@ -67,14 +69,15 @@ export const PostList: Component<PostListProps> = props => {
   }, [loading, nextPage])
 
   useEffect(() => {
-    fetchPost()
+    if (!posts.length)
+      fetchPost()
   }, [])
 
   const renderItem = useCallback(
     renderItemProps => (
       <PostCard
         key={renderItemProps.item.id}
-        cardType={horizontal ? 2 : 1}
+        cardType={cardType}
         screenCatId={categoryId}
         {...renderItemProps}
       ></PostCard>
@@ -87,7 +90,7 @@ export const PostList: Component<PostListProps> = props => {
       props.highlighted && (
         <PostCardAdsType
           key={"seperator-" + props.leadingItem.index}
-          cardType={horizontal ? 2 : 1}
+          cardType={cardType}
         />
       ),
     [],
@@ -106,7 +109,7 @@ export const PostList: Component<PostListProps> = props => {
       // ListFooterComponent={renderFooter}
       renderItem={renderItem}
       keyExtractor={(item, index) => item.id.toString()}
-      extraData={posts}
+      // extraData={posts}
       horizontal={horizontal}
     />
   ))
