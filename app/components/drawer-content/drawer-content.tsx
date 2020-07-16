@@ -1,5 +1,4 @@
 import React, { useCallback } from "react"
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import {
   DrawerContentComponentProps,
   DrawerContentOptions,
@@ -10,7 +9,6 @@ import {
 import { Image, Linking, StyleSheet, TouchableOpacity, View } from "react-native"
 import { drawerContentStyles as styles } from "./drawer-content.styles"
 // import { useNavigation } from "@react-navigation/native"
-
 import {
   Avatar,
   Caption,
@@ -22,6 +20,9 @@ import {
   TouchableRipple,
   useTheme,
 } from "react-native-paper"
+import MaterialCommunityIcons from "react-native-paper/src/components/MaterialCommunityIcon";
+
+
 // import Animated from "react-native-reanimated"
 import config from "../../config"
 // import { PreferencesContext } from './context/preferencesContext';
@@ -100,7 +101,7 @@ export function DrawerContent(props: Props) {
       <Drawer.Section style={styles.drawerSection}>
         <DrawerItem
           icon={({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <MaterialCommunityIcons name="home" color={paperTheme.colors.primary} size={size} />
           )}
           label="Home"
           onPress={() => props.navigation.navigate("home")}
@@ -109,7 +110,7 @@ export function DrawerContent(props: Props) {
           icon={({ color, size }) => (
             <MaterialCommunityIcons
               name="format-list-bulleted-square"
-              color={color}
+              color={paperTheme.colors.primary}
               size={size}
             />
           )}
@@ -118,54 +119,47 @@ export function DrawerContent(props: Props) {
         />
         <DrawerItem
           icon={({ color, size }) => (
-            <MaterialCommunityIcons name="bookmark-outline" color={color} size={size} />
+            <MaterialCommunityIcons name="bookmark-outline" color={paperTheme.colors.primary} size={size} />
           )}
           label="Bookmarks"
           onPress={() => { }}
         />
       </Drawer.Section>
       <Drawer.Section title="Other">
-        <TouchableRipple onPress={() => props.navigation.navigate("aboutUs")}>
-          <View style={styles.preference}>
-            <Text>
-              <MaterialCommunityIcons name="information" />
-              {"   "}About US
-              </Text>
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => props.navigation.navigate("contactUs")}>
-          <View style={styles.preference}>
-            <Text>
-              <MaterialCommunityIcons name="phone" />
-              {"   "}Contact Us
-              </Text>
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => { }}>
-          <View style={styles.preference}>
-            <Text>
-              <MaterialCommunityIcons name="share" />
-              {"   "}Share App
-              </Text>
-          </View>
-        </TouchableRipple>
+        <DrawerItem
+          icon={({ color, size }) => (
+            <MaterialCommunityIcons name="information" color={paperTheme.colors.primary} size={size} />
+          )}
+          label="About US"
+          onPress={() => props.navigation.navigate("aboutUs")}
+        />
+        <DrawerItem
+          icon={({ color, size }) => (
+            <MaterialCommunityIcons name="phone" color={paperTheme.colors.primary} size={size} />
+          )}
+          label="About US"
+          onPress={() => props.navigation.navigate("contactUs")}
+        />
+        <DrawerItem
+          icon={({ color, size }) => (
+            <MaterialCommunityIcons name="share" color={paperTheme.colors.primary} size={size} />
+          )}
+          label="Share App"
+          onPress={() => null}
+        />
       </Drawer.Section>
       <Drawer.Section title="Follow Us">
         {config.followUs
           .filter(f => f.url)
           .map(followUsItem => (
-            <TouchableRipple
+            <DrawerItem
               key={followUsItem.icon}
+              icon={({ color, size }) => (
+                <MaterialCommunityIcons name={followUsItem.icon} color={paperTheme.colors.primary} size={size} />
+              )}
+              label={followUsItem.name}
               onPress={() => handleClick(followUsItem.url)}
-            >
-              <View style={styles.preference}>
-                <Text>
-                  <MaterialCommunityIcons name={followUsItem.icon} />
-                  {"   "}
-                  {followUsItem.name}
-                </Text>
-              </View>
-            </TouchableRipple>
+            />
           ))}
         {config.followUs
           .filter(f => !f.url)

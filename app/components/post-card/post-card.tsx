@@ -2,7 +2,7 @@ import React, { FunctionComponent as Component, useCallback, useEffect } from "r
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { Avatar, Button, Badge, Card, Subheading, Paragraph } from "react-native-paper"
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import MaterialCommunityIcons from "react-native-paper/src/components/MaterialCommunityIcon"
 import { AdMobBanner } from "react-native-admob"
 
 // import { Text } from "../"

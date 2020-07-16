@@ -2,7 +2,7 @@ import React, { FunctionComponent as Component, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import { Text, View, ViewStyle, Linking } from "react-native"
 import { Screen, BaseLayout } from "../components"
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import MaterialCommunityIcons from "react-native-paper/src/components/MaterialCommunityIcon"
 
 import {
   Avatar,

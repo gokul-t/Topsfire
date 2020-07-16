@@ -2,7 +2,7 @@ import React, { FunctionComponent as Component, useCallback, useEffect, useState
 import { observer } from "mobx-react-lite"
 import { ViewStyle, FlatList, TouchableOpacity, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { List } from "react-native-paper"
+import { List, useTheme } from "react-native-paper"
 
 import { Screen, Text, BaseLayout, BulletItem } from "../../components"
 import { useStores } from "../../models"
@@ -17,6 +17,8 @@ export const CategoriesScreen: Component<CategoriesScreenParams> = observer(
     // Pull in one of our MST stores
     const { categoryStore } = useStores()
     const [loading, setLoading] = useState(false)
+    const paperTheme = useTheme()
+
     // OR
     // const rootStore = useStores()
     // Pull in navigation via hook
@@ -59,7 +61,7 @@ export const CategoriesScreen: Component<CategoriesScreenParams> = observer(
         <List.Item
           title={item.formattedName}
           description={item.formattedDescription}
-          left={props => <List.Icon {...props} icon="folder" />}
+          left={props => <List.Icon {...props} icon="folder" color={paperTheme.colors.primary} />}
           key={item.id}
           onPress={() => goCategoryPostsScreen(item)}
         />

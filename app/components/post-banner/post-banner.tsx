@@ -7,7 +7,7 @@ import {
   Paragraph,
   FAB,
 } from "react-native-paper"
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import MaterialCommunityIcons from "react-native-paper/src/components/MaterialCommunityIcon"
 
 import AppJson from "../../../app"
 import { postBannerStyles as styles } from "./post-banner.styles"

@@ -6,6 +6,7 @@ module.exports = {
     },
   },
   plugins: [
+    ["optional-require"],
     [
       "@babel/plugin-proposal-decorators",
       {
