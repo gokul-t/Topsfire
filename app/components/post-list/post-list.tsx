@@ -14,6 +14,8 @@ export interface PostListProps {
   categoryId?: string
   horizontal?: boolean
   filter: Function
+  cardType?: number,
+  onPress?: Function
 }
 
 /**
@@ -38,6 +40,8 @@ export const PostList: Component<PostListProps> = props => {
     categoryId,
     horizontal = false,
     filter,
+    cardType,
+    onPress
   } = props
 
   const [loading, setLoading] = useState(false)
@@ -67,16 +71,18 @@ export const PostList: Component<PostListProps> = props => {
   }, [loading, nextPage])
 
   useEffect(() => {
-    fetchPost()
+    if (!posts.length)
+      fetchPost()
   }, [])
 
   const renderItem = useCallback(
     renderItemProps => (
       <PostCard
-        key={renderItemProps.item.id}
-        cardType={horizontal ? 2 : 1}
-        screenCatId={categoryId}
         {...renderItemProps}
+        key={renderItemProps.item.id}
+        cardType={cardType}
+        screenCatId={categoryId}
+        onPress={onPress}
       ></PostCard>
     ),
     [],
@@ -87,7 +93,7 @@ export const PostList: Component<PostListProps> = props => {
       props.highlighted && (
         <PostCardAdsType
           key={"seperator-" + props.leadingItem.index}
-          cardType={horizontal ? 2 : 1}
+          cardType={cardType}
         />
       ),
     [],
@@ -101,12 +107,12 @@ export const PostList: Component<PostListProps> = props => {
       refreshing={loading}
       onRefresh={fetchPost}
       onEndReached={handleLoadMore}
-      onEndReachedThreshold={10}
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ItemSeparatorComponent}
       // ListFooterComponent={renderFooter}
       renderItem={renderItem}
       keyExtractor={(item, index) => item.id.toString()}
-      extraData={posts}
+      // extraData={posts}
       horizontal={horizontal}
     />
   ))

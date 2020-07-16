@@ -16,7 +16,8 @@ export interface PostCardProps {
   screenCatId: string
   cardType?: number
   separators?: any
-  index?: number
+  index?: number,
+  onPress?: any
 }
 
 /**
@@ -34,12 +35,12 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
-  const { item, screenCatId, cardType = 1, separators, index } = props
-  const goPostScreen = () =>
+  const { item, screenCatId, cardType = 1, separators, index, onPress } = props
+  const goPostScreen = useCallback(onPress ? () => onPress(item) : () =>
     navigation.navigate("post", {
       postId: item.id,
       screenCatId,
-    })
+    }), [item]);
   //   <Image
   //   source={item.imageUrl ? {
   //     uri: item.imageUrl
@@ -63,8 +64,9 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
   ))
 })
 
-export const PostCardAdsType = React.memo((props: { cardType: number }) => {
-  return props.cardType === 1 ? <PostCardAdsType1 /> : <PostCardAdsType2 />
+export const PostCardAdsType = React.memo((props: { cardType?: number }) => {
+  const { cardType = 1 } = props;
+  return cardType === 1 ? <PostCardAdsType1 /> : <PostCardAdsType2 />
 })
 
 function PostCardType1({ item }) {
@@ -146,20 +148,22 @@ function PostCardType2({ item }) {
 
 export function PostCardAdsType2() {
   return (
-    <View
-      style={{
-        // minHeight: 90,
-        justifyContent: "center", //Centered vertically
-        alignItems: "center", // Centered horizontally
-        flex: 1,
-      }}
-    >
-      <AdMobBanner
-        adSize="fullBanner"
-        adUnitID={config.adUnitID.banner}
-        testDevices={[AdMobBanner.simulatorId]}
-        onAdFailedToLoad={error => console.error(error)}
-      />
-    </View>
+    <Card style={styles.CARD2} elevation={12}>
+      <View
+        style={{
+          // minHeight: 90,
+          justifyContent: "center", //Centered vertically
+          alignItems: "center", // Centered horizontally
+          flex: 1,
+        }}
+      >
+        <AdMobBanner
+          adSize="fullBanner"
+          adUnitID={config.adUnitID.banner}
+          testDevices={[AdMobBanner.simulatorId]}
+          onAdFailedToLoad={error => console.error(error)}
+        />
+      </View>
+    </Card>
   )
 }
