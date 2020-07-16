@@ -9,7 +9,8 @@ export interface CategoryPostListProps {
   categoryId: string
   horizontal?: boolean
   filter?: Function,
-  cardType?: number
+  cardType?: number,
+  onPress?: any
 }
 
 /**
@@ -25,7 +26,7 @@ export const CategoryPostList: Component<CategoryPostListProps> = props => {
   // Enable this line to retrieve data from the rootStore (or other store)
   // const rootStore = useStores()
   // or
-  const { categoryId, horizontal, filter, cardType } = props
+  const { categoryId, horizontal, filter, cardType, onPress } = props
   const { categoryPostStore } = useStores()
 
   const postStore = categoryPostStore.getPostStore(categoryId)
@@ -41,6 +42,7 @@ export const CategoryPostList: Component<CategoryPostListProps> = props => {
         categoryId,
         horizontal,
         filter,
+        onPress,
         cardType
       }}
     />

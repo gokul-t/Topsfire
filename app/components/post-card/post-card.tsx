@@ -16,7 +16,8 @@ export interface PostCardProps {
   screenCatId: string
   cardType?: number
   separators?: any
-  index?: number
+  index?: number,
+  onPress?: any
 }
 
 /**
@@ -34,12 +35,12 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
   // const rootStore = useStores()
   // or
   // const { otherStore, userStore } = useStores()
-  const { item, screenCatId, cardType = 1, separators, index } = props
-  const goPostScreen = () =>
+  const { item, screenCatId, cardType = 1, separators, index, onPress } = props
+  const goPostScreen = useCallback(onPress ? () => onPress(item) : () =>
     navigation.navigate("post", {
       postId: item.id,
       screenCatId,
-    })
+    }), [item]);
   //   <Image
   //   source={item.imageUrl ? {
   //     uri: item.imageUrl

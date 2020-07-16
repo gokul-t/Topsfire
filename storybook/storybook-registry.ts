@@ -1,3 +1,6 @@
+require("../app/components/post-content/post-content.story")
+require("../app/components/post-banner/post-banner.story")
+require("../app/components/related-posts/related-posts.story")
 require("../app/components/category-post-list/category-post-list.story")
 require("../app/components/drawer-content/drawer-content.story")
 require("../app/components/post-card/post-card.story")

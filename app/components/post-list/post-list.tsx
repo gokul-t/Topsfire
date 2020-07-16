@@ -14,7 +14,8 @@ export interface PostListProps {
   categoryId?: string
   horizontal?: boolean
   filter: Function
-  cardType?: number
+  cardType?: number,
+  onPress?: Function
 }
 
 /**
@@ -39,7 +40,8 @@ export const PostList: Component<PostListProps> = props => {
     categoryId,
     horizontal = false,
     filter,
-    cardType
+    cardType,
+    onPress
   } = props
 
   const [loading, setLoading] = useState(false)
@@ -76,10 +78,11 @@ export const PostList: Component<PostListProps> = props => {
   const renderItem = useCallback(
     renderItemProps => (
       <PostCard
+        {...renderItemProps}
         key={renderItemProps.item.id}
         cardType={cardType}
         screenCatId={categoryId}
-        {...renderItemProps}
+        onPress={onPress}
       ></PostCard>
     ),
     [],
