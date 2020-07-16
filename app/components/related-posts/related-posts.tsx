@@ -1,17 +1,14 @@
 import React, { useCallback } from "react"
-import { View, ViewStyle, FlatList } from "react-native"
+import { View, FlatList } from "react-native"
 import {
   Caption,
   Surface,
   Title,
 } from "react-native-paper"
 import { CategoryPostList } from "../"
-import { relatedPostsStyles as styles } from "./related-posts.styles"
+// import { relatedPostsStyles as styles } from "./related-posts.styles"
 
 export interface RelatedPostsProps {
-  /**
-   * Text which is looked up via i18n.
-   */
   post: any
 }
 
@@ -20,7 +17,7 @@ export interface RelatedPostsProps {
  *
  * Component description here for TypeScript tips.
  */
-export function RelatedPosts(props: RelatedPostsProps) {
+export const RelatedPosts = React.memo((props: RelatedPostsProps) => {
   // grab the props
   const { post } = props
   const renderRelatedPost = useCallback(
@@ -37,9 +34,7 @@ export function RelatedPosts(props: RelatedPostsProps) {
           ></CategoryPostList>
         </Surface>
       )
-    },
-    [],
-  );
+    }, []);
 
   const excludePost = useCallback(
     p => {
@@ -58,4 +53,4 @@ export function RelatedPosts(props: RelatedPostsProps) {
       />
     </View>
   )
-}
+})

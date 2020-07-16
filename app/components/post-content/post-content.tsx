@@ -1,9 +1,9 @@
 import * as React from "react"
-import { Dimensions, View, ViewStyle } from "react-native"
+import { Dimensions, View } from "react-native"
 import HTML from "react-native-render-html"
 
-import { Text } from "../"
-import { postContentStyles as styles } from "./post-content.styles"
+// import { Text } from "../"
+// import { postContentStyles as styles } from "./post-content.styles"
 
 export interface PostContentProps {
   /**
@@ -17,7 +17,7 @@ export interface PostContentProps {
  *
  * Component description here for TypeScript tips.
  */
-export function PostContent(props: PostContentProps) {
+export const PostContent = React.memo((props: PostContentProps) => {
   // grab the props
   const { post } = props
   const windowWidth = Dimensions.get("window").width;
@@ -46,4 +46,4 @@ export function PostContent(props: PostContentProps) {
       }}
     />
   )
-}
+});

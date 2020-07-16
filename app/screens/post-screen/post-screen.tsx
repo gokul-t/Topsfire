@@ -46,7 +46,7 @@ export const PostScreen: Component<PostScreenProps> = observer(function PostScre
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowRelatedPosts(true);
-    }, 6000);
+    }, 3000);
     return () => clearTimeout(timeout);
   }, []);
 

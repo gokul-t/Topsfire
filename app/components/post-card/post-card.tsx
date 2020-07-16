@@ -58,9 +58,7 @@ export const PostCard: Component<PostCardProps> = React.memo(props => {
   }, [])
 
   return useObserver(() => (
-    <TouchableOpacity onPress={goPostScreen}>
-      {cardType === 1 ? <PostCardType1 item={item} /> : <PostCardType2 item={item} />}
-    </TouchableOpacity>
+    cardType === 1 ? <PostCardType1 item={item} onPress={goPostScreen} /> : <PostCardType2 item={item} onPress={goPostScreen} />
   ))
 })
 
@@ -69,9 +67,9 @@ export const PostCardAdsType = React.memo((props: { cardType?: number }) => {
   return cardType === 1 ? <PostCardAdsType1 /> : <PostCardAdsType2 />
 })
 
-function PostCardType1({ item }) {
+function PostCardType1({ item, onPress }) {
   return (
-    <Card style={styles.CARD} elevation={12}>
+    <Card style={styles.CARD} elevation={12} onPress={onPress}>
       <Card.Cover source={{ uri: item.imageUrl }} />
       <Card.Content style={styles.CardContent}>
         <Subheading numberOfLines={3}>{item.formattedTitle}</Subheading>
@@ -122,9 +120,9 @@ export function PostCardAdsType1(props) {
   )
 }
 
-function PostCardType2({ item }) {
+function PostCardType2({ item, onPress }) {
   return (
-    <Card style={styles.CARD2} elevation={12}>
+    <Card style={styles.CARD2} elevation={12} onPress={onPress}>
       <View style={{ flex: 1, flexDirection: "row" }}>
         <Image
           source={{ uri: item.imageUrl }}
