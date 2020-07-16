@@ -1,10 +1,9 @@
 import React, { FunctionComponent as Component, useCallback, useEffect, useState } from "react"
 import { FlatList } from "react-native"
-import config from "../../config"
 import { PostCard, PostCardAdsType } from "../"
 import { useObserver } from "mobx-react-lite"
 // import { useStores, PostStore, PostStoreSnapshot } from "../../models"
-import { postListStyles as styles } from "./post-list.styles"
+// import { postListStyles as styles } from "./post-list.styles"
 
 export interface PostListProps {
   posts: any
@@ -107,7 +106,7 @@ export const PostList: Component<PostListProps> = props => {
       refreshing={loading}
       onRefresh={fetchPost}
       onEndReached={handleLoadMore}
-      onEndReachedThreshold={0.5}
+      onEndReachedThreshold={5}
       ItemSeparatorComponent={ItemSeparatorComponent}
       // ListFooterComponent={renderFooter}
       renderItem={renderItem}

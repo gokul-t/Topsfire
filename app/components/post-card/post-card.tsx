@@ -132,7 +132,7 @@ function PostCardType2({ item, onPress }) {
             borderRadius: 5,
           }}
         />
-        <Card.Content>
+        <Card.Content style={{ flexShrink: 1 }}>
           <Subheading numberOfLines={3}>{item.formattedTitle}</Subheading>
           <Paragraph>
             <MaterialCommunityIcons name="clock" />
