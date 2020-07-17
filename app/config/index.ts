@@ -36,5 +36,5 @@ export default {
     nativeAdvancedVideo: "ca-app-pub-3940256099942544/1044960115",
   },
   dateFormat: "MMM d, Y",
-  iconUri: env.ICON_URI || "https://via.placeholder.com/100",
+  iconUri: env.ICON_URI,
 }

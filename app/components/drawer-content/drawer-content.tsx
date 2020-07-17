@@ -86,9 +86,7 @@ export function DrawerContent(props: Props) {
           }}
         >
           <Image
-            source={{
-              uri: config.iconUri,
-            }}
+            source={config.iconUri}
             style={{
               width: 75,
               height: 75,
