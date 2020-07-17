@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite"
 import { ViewStyle, FlatList, TouchableOpacity, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { List, useTheme } from "react-native-paper"
+import { ActivityIndicator } from "react-native-paper"
 
 import { Screen, Text, BaseLayout, BulletItem } from "../../components"
 import { useStores } from "../../models"
@@ -16,6 +17,7 @@ export const CategoriesScreen: Component<CategoriesScreenParams> = observer(
   function CategoriesScreen({ navigation: drawerNavigation }) {
     // Pull in one of our MST stores
     const { categoryStore } = useStores()
+    const [refreshing, setRefreshing] = useState(false)
     const [loading, setLoading] = useState(false)
     const paperTheme = useTheme()
 
@@ -29,19 +31,17 @@ export const CategoriesScreen: Component<CategoriesScreenParams> = observer(
       })
     const { categories, getCategories, loadMoreCategories, nextPage } = categoryStore
     const fetchCategories = useCallback(async () => {
-      if (!loading) {
-        setLoading(true)
-        try {
-          await getCategories()
-        } catch (error) {
-          __DEV__ && console.tron.log(error)
-        }
-        setLoading(false)
+      setRefreshing(true)
+      try {
+        await getCategories()
+      } catch (error) {
+        __DEV__ && console.tron.log(error)
       }
-    }, [loading])
+      setRefreshing(false)
+    }, [])
 
     const handleLoadMore = useCallback(async () => {
-      if (!loading && nextPage) {
+      if (!loading && !refreshing && nextPage) {
         setLoading(true)
         try {
           await loadMoreCategories()
@@ -50,11 +50,15 @@ export const CategoriesScreen: Component<CategoriesScreenParams> = observer(
         }
         setLoading(false)
       }
-    }, [loading, nextPage])
+    }, [loading, refreshing, nextPage])
 
     useEffect(() => {
       fetchCategories()
     }, [])
+
+    const renderFooter = useCallback(() => {
+      return loading ? <ActivityIndicator></ActivityIndicator> : null;
+    }, [loading]);
 
     const renderItem = useCallback(
       ({ item }) => (
@@ -80,10 +84,10 @@ export const CategoriesScreen: Component<CategoriesScreenParams> = observer(
         <FlatList
           data={categories}
           onRefresh={fetchCategories}
-          refreshing={loading}
+          refreshing={refreshing}
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5}
-          // ListFooterComponent={renderFooter}
+          onEndReachedThreshold={5}
+          ListFooterComponent={renderFooter}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           extraData={categories}

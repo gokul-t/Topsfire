@@ -2,6 +2,7 @@ import React, { FunctionComponent as Component, useCallback, useEffect, useState
 import { FlatList } from "react-native"
 import { PostCard, PostCardAdsType } from "../"
 import { useObserver } from "mobx-react-lite"
+import { ActivityIndicator } from "react-native-paper"
 // import { useStores, PostStore, PostStoreSnapshot } from "../../models"
 // import { postListStyles as styles } from "./post-list.styles"
 
@@ -12,9 +13,10 @@ export interface PostListProps {
   nextPage: boolean
   categoryId?: string
   horizontal?: boolean
-  filter: Function
+  filter?: Function
   cardType?: number,
-  onPress?: Function
+  onPress?: Function,
+  forceFetch?: Boolean
 }
 
 /**
@@ -40,25 +42,26 @@ export const PostList: Component<PostListProps> = props => {
     horizontal = false,
     filter,
     cardType,
-    onPress
+    onPress,
+    forceFetch = true
   } = props
 
+  const [refreshing, setRefreshing] = useState(false)
   const [loading, setLoading] = useState(false)
 
+
   const fetchPost = useCallback(async () => {
-    if (!loading) {
-      setLoading(true)
-      try {
-        await getPosts({ categoryId })
-      } catch (error) {
-        __DEV__ && console.tron.log(error)
-      }
-      setLoading(false)
+    setRefreshing(true)
+    try {
+      await getPosts({ categoryId })
+    } catch (error) {
+      __DEV__ && console.tron.log(error)
     }
-  }, [loading])
+    setRefreshing(false)
+  }, [])
 
   const handleLoadMore = useCallback(async () => {
-    if (!loading && nextPage) {
+    if (!loading && !refreshing && nextPage) {
       setLoading(true)
       try {
         await loadMorePosts({ categoryId })
@@ -67,10 +70,10 @@ export const PostList: Component<PostListProps> = props => {
       }
       setLoading(false)
     }
-  }, [loading, nextPage])
+  }, [loading, refreshing, nextPage])
 
   useEffect(() => {
-    if (!posts.length)
+    if (forceFetch || !posts.length)
       fetchPost()
   }, [])
 
@@ -98,17 +101,21 @@ export const PostList: Component<PostListProps> = props => {
     [],
   )
 
+  const renderFooter = useCallback(() => {
+    return loading ? <ActivityIndicator></ActivityIndicator> : null;
+  }, [loading]);
+
   const data = filter ? posts.filter(filter) : posts
 
   return useObserver(() => (
     <FlatList
       data={data}
-      refreshing={loading}
+      refreshing={refreshing}
       onRefresh={fetchPost}
       onEndReached={handleLoadMore}
       onEndReachedThreshold={5}
       ItemSeparatorComponent={ItemSeparatorComponent}
-      // ListFooterComponent={renderFooter}
+      ListFooterComponent={renderFooter}
       renderItem={renderItem}
       keyExtractor={(item, index) => item.id.toString()}
       // extraData={posts}

@@ -31,6 +31,7 @@ export const RelatedPosts = React.memo((props: RelatedPostsProps) => {
             categoryId={categoryModel.id}
             filter={excludePost}
             cardType={2}
+            forceFetch={false}
           ></CategoryPostList>
         </Surface>
       )
